@@ -1409,7 +1409,7 @@ def add_config(
     # cfg.add_channel(name="ce3tau", id=23, label=r"$e\tau{h}\tau{h}\tau{h}$")
     # cfg.add_channel(name="cmu3tau", id=24, label=r"$\mu\tau{h}\tau{h}\tau{h}$")
     # cfg.add_channel(name="c4tau", id=25, label=r"$\tau{h}\tau{h}\tau{h}\tau{h}$")
-    
+
     # add categories
     from hbt.config.categories import add_categories
     add_categories(cfg)

@@ -38,16 +38,16 @@ def add_categories(config: od.Config) -> None:
     _add_category(config, name="ce3mu", id=21, selection="cat_ce3mu", label=config.channels.n.ce3mu.label)
     _add_category(config, name="c4mu", id=22, selection="cat_c4mu", label=config.channels.n.c4mu.label)
     # to be implemented
-    #_add_category(config, name="c3etau", id=16, selection="cat_c3etau", label=config.channels.n.c3etau.label)
-    #_add_category(config, name="c2emutau", id=17, selection="cat_c2emutau", label=config.channels.n.c2emutau.label)
-    #_add_category(config, name="ce2mutau", id=18, selection="cat_ce2mutau", label=config.channels.n.ce2mutau.label)
-    #_add_category(config, name="c3mutau", id=19, selection="cat_c3mutau", label=config.channels.n.c3mutau.label)
-    #_add_category(config, name="c2e2tau", id=20, selection="cat_c2e2tau", label=config.channels.n.c2e2tau.label)
-    #_add_category(config, name="cemu2tau", id=21, selection="cat_cemu2tau", label=config.channels.n.cemu2tau.label)
-    #_add_category(config, name="c2mu2tau", id=22, selection="cat_c2mu2tau", label=config.channels.n.c2mu2tau.label)
-    #_add_category(config, name="ce3tau", id=23, selection="cat_ce3tau", label=config.channels.n.ce3tau.label)
-    #_add_category(config, name="cmu3tau", id=24, selection="cat_cmu3tau", label=config.channels.n.cmu3tau.label)
-    #_add_category(config, name="c4tau", id=25, selection="cat_c4tau", label=config.channels.n.c4tau.label)
+    # _add_category(config, name="c3etau", id=16, selection="cat_c3etau", label=config.channels.n.c3etau.label)
+    # _add_category(config, name="c2emutau", id=17, selection="cat_c2emutau", label=config.channels.n.c2emutau.label)
+    # _add_category(config, name="ce2mutau", id=18, selection="cat_ce2mutau", label=config.channels.n.ce2mutau.label)
+    # _add_category(config, name="c3mutau", id=19, selection="cat_c3mutau", label=config.channels.n.c3mutau.label)
+    # _add_category(config, name="c2e2tau", id=20, selection="cat_c2e2tau", label=config.channels.n.c2e2tau.label)
+    # _add_category(config, name="cemu2tau", id=21, selection="cat_cemu2tau", label=config.channels.n.cemu2tau.label)
+    # _add_category(config, name="c2mu2tau", id=22, selection="cat_c2mu2tau", label=config.channels.n.c2mu2tau.label)
+    # _add_category(config, name="ce3tau", id=23, selection="cat_ce3tau", label=config.channels.n.ce3tau.label)
+    # _add_category(config, name="cmu3tau", id=24, selection="cat_cmu3tau", label=config.channels.n.cmu3tau.label)
+    # _add_category(config, name="c4tau", id=25, selection="cat_c4tau", label=config.channels.n.c4tau.label)
 
     # qcd regions
     _add_category(config, name="os", id=10, selection="cat_os", label="OS", tags={"os"})
@@ -67,8 +67,8 @@ def add_categories(config: od.Config) -> None:
 
     # multilepton
     # 3l/4l inclusive, later split into CR / SR via Z-peak
-    _add_category(config, name="cat3l0tau", id=1001, selection="cat_3l0tau", label="$3\ell 0\tau_h$")
-    _add_category(config, name="cat4l", id=1002, selection="cat_4l", label="$4\ell$")    
+    _add_category(config, name="cat3l0tau", id=1001, selection="cat_3l0tau", label="$3\ell 0\tau_h$")  # noqa: W605
+    _add_category(config, name="cat4l", id=1002, selection="cat_4l", label="$4\ell$")  # noqa: W605
 
     #
     # build groups

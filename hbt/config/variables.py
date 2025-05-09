@@ -644,12 +644,11 @@ def add_variables(config: od.Config) -> None:
     add_variable(
         config,
         name="nlep",
-        expression=lambda events: ak.num((ak.concatenate([events.Electron["pt"] * 1, events.Muon["pt"] * 1], axis=1)[:, :]), axis=1),
+        expression=lambda events: ak.num((ak.concatenate([events.Electron["pt"] * 1, events.Muon["pt"] * 1], axis=1)[:, :]), axis=1),  # noqa: E501
         aux={"inputs": {"{Electron,Muon}.pt"}},
         binning=(11, -0.5, 10.5),
         x_title=r"Number of leptons",
     )
-
 
     def build_m4l(events):
         objects = ak.concatenate([events.Electron * 1, events.Muon * 1], axis=1)[:, :]
@@ -663,9 +662,9 @@ def add_variables(config: od.Config) -> None:
         aux={"inputs": build_m4l.inputs},
         binning=[0, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 380, 400, 450],
         unit="GeV",
-        x_title="$m_{4\ell}$",
+        x_title="$m_{4\ell}$",  # noqa: W605
     )
-  
+
     add_variable(
         config,
         name="nele",
