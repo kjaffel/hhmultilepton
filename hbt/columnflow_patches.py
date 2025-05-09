@@ -76,4 +76,4 @@ def patch_htcondor_workflow_naf_resources():
 def patch_all():
     patch_bundle_repo_exclude_files()
     patch_remote_workflow_poll_interval()
-    patch_htcondor_workflow_naf_resources()
+#    patch_htcondor_workflow_naf_resources()

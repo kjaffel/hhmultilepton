@@ -1249,7 +1249,8 @@ def add_config(
         # met phi correction
         add_external("met_phi_corr", (f"{json_mirror}/POG/JME/{json_pog_era}/met.json.gz", "v1"))
         # hh-btag repository with TF saved model directories trained on Run2 UL samples
-        add_external("hh_btag_repo", ("https://gitlab.cern.ch/hh/bbtautau/hh-btag/-/archive/master/hh-btag-master.tar.gz", "v2"))  # noqa
+        add_external("hh_btag_repo", ("/afs/cern.ch/user/t/tolange/public/hh-btag-master.tar.gz", "v2"))  # noqa
+        #add_external("hh_btag_repo", ("https://gitlab.cern.ch/hh/bbtautau/hh-btag/-/archive/master/hh-btag-master.tar.gz", "v2"))  # noqa
 
     elif run == 3:
         # muon scale factors
@@ -1257,7 +1258,8 @@ def add_config(
         # electron scale factors
         add_external("electron_sf", (f"{json_mirror}/POG/EGM/{json_pog_era}/electron.json.gz", "v1"))
         # hh-btag repository with TF saved model directories trained on 22+23 samples using pnet
-        add_external("hh_btag_repo", ("https://gitlab.cern.ch/hh/bbtautau/hh-btag/-/archive/master/hh-btag-master.tar.gz", "v3"))  # noqa
+        add_external("hh_btag_repo", ("/afs/cern.ch/user/t/tolange/public/hh-btag-master.tar.gz", "v3"))  # noqa
+        #add_external("hh_btag_repo", ("https://gitlab.cern.ch/hh/bbtautau/hh-btag/-/archive/master/hh-btag-master.tar.gz", "v3"))  # noqa
 
         # TODO: electron (and photon) energy corrections and smearing are only available for 2022
         #       include them when available
@@ -1387,7 +1389,27 @@ def add_config(
     cfg.add_channel(name="ee", id=4, label=r"$ee$")
     cfg.add_channel(name="mumu", id=5, label=r"$\mu\mu$")
     cfg.add_channel(name="emu", id=6, label=r"$e\mu$")
-
+    cfg.add_channel(name="c3e", id=7, label=r"$eee$")
+    cfg.add_channel(name="c2emu", id=8, label=r"$ee\mu$")
+    cfg.add_channel(name="ce2mu", id=9, label=r"$e\mu\mu$")
+    cfg.add_channel(name="c3mu", id=10, label=r"$\mu\mu\mu$")
+    cfg.add_channel(name="c4e", id=11, label=r"$eeee$")
+    cfg.add_channel(name="c3emu", id=12, label=r"$eee\mu$")
+    cfg.add_channel(name="c2e2mu", id=13, label=r"$ee\mu\mu$")
+    cfg.add_channel(name="ce3mu", id=14, label=r"$e\mu\mu\mu$")
+    cfg.add_channel(name="c4mu", id=15, label=r"$\mu\mu\mu\mu$")
+    # to be implemented
+    # cfg.add_channel(name="c3etau", id=16, label=r"$eee\tau_{h}$")
+    # cfg.add_channel(name="c2emutau", id=17, label=r"$ee\mu\tau_{h}$")
+    # cfg.add_channel(name="ce2mutau", id=18, label=r"$e\mu\mu\tau{h}$")
+    # cfg.add_channel(name="c3mutau", id=19, label=r"$\mu\mu\mu\tau{h}$")
+    # cfg.add_channel(name="c2e2tau", id=20, label=r"$ee\tau{h}\tau{h}$")
+    # cfg.add_channel(name="cemu2tau", id=21, label=r"$e\mu\tau{h}\tau{h}$")
+    # cfg.add_channel(name="c2mu2tau", id=22, label=r"$\mu\mu\tau{h}\tau{h}$")
+    # cfg.add_channel(name="ce3tau", id=23, label=r"$e\tau{h}\tau{h}\tau{h}$")
+    # cfg.add_channel(name="cmu3tau", id=24, label=r"$\mu\tau{h}\tau{h}\tau{h}$")
+    # cfg.add_channel(name="c4tau", id=25, label=r"$\tau{h}\tau{h}\tau{h}\tau{h}$")
+    
     # add categories
     from hbt.config.categories import add_categories
     add_categories(cfg)

@@ -632,6 +632,58 @@ def add_variables(config: od.Config) -> None:
         x_title=r"Number of jets",
     )
 
+    add_variable(
+        config,
+        name="nmu",
+        expression=lambda events: ak.num(events.Muon["pt"], axis=1),
+        aux={"inputs": {"Muon.pt"}},
+        binning=(11, -0.5, 10.5),
+        x_title=r"Number of muons",
+    )
+
+    add_variable(
+        config,
+        name="nlep",
+        expression=lambda events: ak.num((ak.concatenate([events.Electron["pt"] * 1, events.Muon["pt"] * 1], axis=1)[:, :]), axis=1),
+        aux={"inputs": {"{Electron,Muon}.pt"}},
+        binning=(11, -0.5, 10.5),
+        x_title=r"Number of leptons",
+    )
+
+
+    def build_m4l(events):
+        objects = ak.concatenate([events.Electron * 1, events.Muon * 1], axis=1)[:, :]
+        objects_sum = objects.sum(axis=1)
+        return objects_sum.mass
+    build_m4l.inputs = ["{Electron,Muon}.{pt,eta,phi,mass}"]
+    add_variable(
+        config,
+        name="m4l",
+        expression=partial(build_m4l),
+        aux={"inputs": build_m4l.inputs},
+        binning=[0, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 380, 400, 450],
+        unit="GeV",
+        x_title="$m_{4\ell}$",
+    )
+  
+    add_variable(
+        config,
+        name="nele",
+        expression=lambda events: ak.num(events.Electron["pt"], axis=1),
+        aux={"inputs": {"Electron.pt"}},
+        binning=(11, -0.5, 10.5),
+        x_title=r"Number of electrons",
+    )
+
+    add_variable(
+        config,
+        name="ntau",
+        expression=lambda events: ak.num(events.Tau["pt"], axis=1),
+        aux={"inputs": {"Tau.pt"}},
+        binning=(11, -0.5, 10.5),
+        x_title=r"Number of electrons",
+    )
+
     for proc in ["hh", "tt", "dy"]:
         # outputs of the resonant pDNN at SM-like mass and spin values
         add_variable(

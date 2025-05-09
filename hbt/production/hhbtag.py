@@ -190,7 +190,28 @@ def hhbtag_setup(self: Producer, reqs: dict, inputs: dict, reader_targets: Inser
         self.config_inst.channels.n.ee.id: 4 if self.hhbtag_version == "v3" else 0,
         self.config_inst.channels.n.mumu.id: 3 if self.hhbtag_version == "v3" else 1,
         self.config_inst.channels.n.emu.id: 5 if self.hhbtag_version == "v3" else 0,
+        # for now, for multilepton we can remove the hh btag
+        self.config_inst.channels.n.c3e.id: 0,
+        self.config_inst.channels.n.c2emu.id: 0,
+        self.config_inst.channels.n.ce2mu.id: 0,
+        self.config_inst.channels.n.c3mu.id: 0,
+        self.config_inst.channels.n.c4e.id: 0,
+        self.config_inst.channels.n.c3emu.id: 0,
+        self.config_inst.channels.n.c2e2mu.id: 0,
+        self.config_inst.channels.n.ce3mu.id: 0,
+        self.config_inst.channels.n.c4mu.id: 0,
+        #self.config_inst.channels.n.c3etau.id: 0,
+        #self.config_inst.channels.n.c2emutau.id: 0,
+        #self.config_inst.channels.n.ce2mutau.id: 0,
+        #self.config_inst.channels.n.c3mutau.id: 0,
+        #self.config_inst.channels.n.c2e2tau.id: 0,
+        #self.config_inst.channels.n.cemu2tau.id: 0,
+        #self.config_inst.channels.n.c2mu2tau.id: 0,
+        #self.config_inst.channels.n.ce3tau.id: 0,
+        #self.config_inst.channels.n.cmu3tau.id: 0,
+        #self.config_inst.channels.n.c4tau.id: 0,
     }
+
     # convert to
     self.hhbtag_channel_map = np.array([
         channel_map.get(cid, np.nan)
