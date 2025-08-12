@@ -216,7 +216,6 @@ def add_hooks(analysis_inst: od.Analysis) -> None:
 
         return hists
 
-
     def qcd_estimation(
         task: law.Task,
         hists: dict[od.Config, dict[od.Process, Any]],

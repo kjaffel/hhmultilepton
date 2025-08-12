@@ -48,7 +48,6 @@ custom_deterministic_event_seeds_data = custom_deterministic_event_seeds_mc.deri
 )
 
 
-
 @calibrator(
     uses={
         IF_MC(mc_weight), IF_MC(custom_deterministic_event_seeds_mc), IF_DATA(custom_deterministic_event_seeds_data),

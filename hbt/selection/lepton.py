@@ -897,7 +897,7 @@ def lepton_selection(
                         continue
                     # evaluate the electron selection once (it is the same for all single triggers)
                     if emu_electron_mask is False:
-                        emu_electron_mask_if_triggered, emu_electron_control_mask, _ = self[electron_selection](events, _trigger, **sel_kwargs)  # noqa: E501
+                        emu_electron_mask_for_matching, emu_electron_control_mask, _ = self[electron_selection](events, _trigger, **sel_kwargs)  # noqa: E501
                     # store the trigger decision
                     e_trig_fired = e_trig_fired | _trigger_fired
                     # evaluate the matching

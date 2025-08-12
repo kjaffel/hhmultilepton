@@ -180,7 +180,6 @@ def hhbtag_requires(self: Producer, task: law.Task, reqs: dict, **kwargs) -> Non
     reqs["external_files"] = BundleExternalFiles.req(task)
 
 
-
 @hhbtag.setup
 def hhbtag_setup(
     self: Producer,

@@ -43,8 +43,8 @@ def jet_trigger_efficiencies(
     Producer for jet trigger efficiencies derived by the CCLUB group at object level. Requires an external file in the
     config under ``trigger_sf.jet``.
 
-    *get_jet_file* can be adapted in a subclass in case it is stored differently in the external files. A correction set
-    named ``"jet_trigger_corrector"`` is extracted from it.
+    *get_jet_file* can be adapted in a subclass in case it is stored differently in the external files. A correction
+    set named ``"jet_trigger_corrector"`` is extracted from it.
 
     Resources:
     https://gitlab.cern.ch/cclubbtautau/AnalysisCore/-/blob/59ae66c4a39d3e54afad5733895c33b1fb511c47/data/TriggerScaleFactors/2023postBPix/ditaujet_jetleg_SFs_postBPix.json

@@ -26,6 +26,7 @@ hist = maybe_import("hist")
 # helper
 set_ak_column_f32 = functools.partial(set_ak_column, value_type=np.float32)
 
+
 @producer(
     uses={pu_weight.PRODUCES, "process_id"},
     mc_only=True,
@@ -48,6 +49,7 @@ def normalized_pu_weight(self: Producer, events: ak.Array, **kwargs) -> ak.Array
         events = set_ak_column_f32(events, f"normalized_{weight_name}", norm_weight_per_pid)
 
     return events
+
 
 @normalized_pu_weight.post_init
 def normalized_pu_weight_post_init(self: Producer, task: law.Task, **kwargs) -> None:
@@ -132,6 +134,7 @@ def normalized_pdf_weight_post_init(self: Producer, task: law.Task, **kwargs) ->
     self.uses |= self.pdf_weight_names
     self.produces |= {f"normalized_{weight_name}" for weight_name in self.pdf_weight_names}
 
+
 @normalized_pdf_weight.requires
 def normalized_pdf_weight_requires(self: Producer, task: law.Task, reqs: dict, **kwargs) -> None:
     from columnflow.tasks.selection import MergeSelectionStats
@@ -192,6 +195,7 @@ def normalized_murmuf_weight_post_init(self: Producer, task: law.Task, **kwargs)
     self.uses.clear()
     self.uses |= self.mu_weight_names
     self.produces |= {f"normalized_{weight_name}" for weight_name in self.mu_weight_names}
+
 
 @normalized_murmuf_weight.requires
 def normalized_murmuf_weight_requires(self: Producer, task: law.Task, reqs: dict, **kwargs) -> None:

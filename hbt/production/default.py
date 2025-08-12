@@ -17,6 +17,7 @@ from columnflow.columnar_util import attach_coffea_behavior, default_coffea_coll
 from hbt.production.weights import (
     normalized_pu_weight, normalized_pdf_weight, normalized_murmuf_weight, normalized_ps_weights,
 )
+
 from hbt.production.btag import normalized_btag_weights_deepjet, normalized_btag_weights_pnet
 from hbt.production.tau import tau_weights
 from hbt.production.trigger_sf import trigger_weight
@@ -25,6 +26,7 @@ from hbt.util import IF_DATASET_HAS_LHE_WEIGHTS, IF_RUN_3
 ak = maybe_import("awkward")
 
 top_pt_weight = cf_top_pt_weight.derive("top_pt_weight", cls_dict={"require_dataset_tag": None})
+
 
 @producer(
     uses={

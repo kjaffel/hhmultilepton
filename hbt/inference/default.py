@@ -15,6 +15,7 @@ from hbt.inference.base import HBTInferenceModelBase
 
 logger = law.logger.get_logger(__name__)
 
+
 class default(HBTInferenceModelBase):
     """
     Default statistical model for the HH -> bbtautau analysis.
@@ -118,7 +119,6 @@ class default(HBTInferenceModelBase):
                     is_signal=proc_inst.has_tag("nonresonant_signal"),
                     is_dynamic=is_dynamic,
                 )
-
 
     def init_parameters(self) -> None:
         # general groups

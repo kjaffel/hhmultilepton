@@ -216,7 +216,6 @@ def tau_weights_setup(
     reqs: dict[str, DotDict[str, Any]],
     **kwargs,
 ) -> None:
-    bundle = reqs["external_files"]
 
     # create the trigger and id correctors
     tau_file = self.get_tau_file(reqs["external_files"].files)

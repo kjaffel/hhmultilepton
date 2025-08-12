@@ -330,7 +330,6 @@ def _res_dnn_evaluation_setup(
     if not isinstance(self.parametrized, bool):
         raise AttributeError("'parametrized' must be set in the producer configuration")
 
-
     # unpack the model archive
     bundle = reqs["external_files"]
     bundle.files
@@ -396,6 +395,7 @@ def _res_dnn_evaluation_teardown(self: Producer, **kwargs) -> None:
 # parameterized network
 # trained with Radion (spin 0) and Graviton (spin 2) samples up to mX = 3000 GeV in all run 2 eras
 #
+
 
 res_pdnn = _res_dnn_evaluation.derive("res_pdnn", cls_dict={
     "parametrized": True,

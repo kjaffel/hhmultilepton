@@ -14,8 +14,9 @@ from columnflow.inference import InferenceModel
 
 class HBTInferenceModelBase(InferenceModel):
     """
-    Base class for statistical models with support for a single or and multiple configs. In the latter case, each set of
-    processes is created per config and will thus have different names, resulting in a "stacking" of histograms.
+    Base class for statistical models with support for a single or and multiple configs. In the latter case,
+    each set of processes is created per config and will thus have different names,
+    resulting in a "stacking" of histograms.
     """
 
     def __init__(self, *args, **kwargs) -> None:

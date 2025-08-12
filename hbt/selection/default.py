@@ -268,6 +268,7 @@ def default_init(self: Selector, **kwargs) -> None:
             # save it as an attribute
             setattr(self, prod_name, prod)
 
+
 @default.setup
 def default_setup(self: Selector, task: law.Task, **kwargs) -> None:
     # pre-define variable objects for creating stats histograms
@@ -290,6 +291,7 @@ def default_setup(self: Selector, task: law.Task, **kwargs) -> None:
             },
         ),
     ]
+
 
 empty = default.derive("empty", cls_dict={})
 

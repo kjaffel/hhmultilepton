@@ -32,12 +32,15 @@ import os
 afsbase = "/afs/cern.ch/"
 cvmfsbase = "/cvmfs/"
 if not os.path.isdir(afsbase):
-    if os.path.isdir('/local/tolange/afsmirror'):
+    if os.path.isdir("/local/tolange/afsmirror"):
         # on manivald, found afs mirror
-        afsbase = '/local/tolange/afsmirror'
+        afsbase = "/local/tolange/afsmirror"
         cvmfsbase = "/local/tolange/afsmirror/cvmfs/"
     else:
-        raise Exception("afs not reachable and no mirrir set, please fix configs_hbt and make external files available!")
+        raise Exception(
+            "afs not reachable and no mirrir set, please fix configs_hbt and make external files available!",
+        )
+
 
 def add_config(
     analysis: od.Analysis,
@@ -175,14 +178,14 @@ def add_config(
         "hh_vbf_htt_htt_kvm1p6_k2v2p72",
         "hh_vbf_htt_htt_kvm1p83_k2v3p57",
         "hh_vbf_htt_htt_kvm2p12_k2v3p87",
-        'hh_vbf_htt_htt_kv1p74_k2v1p37_kl14p4',
-        'hh_vbf_htt_htt_kvm0p012_k2v0p03_kl10p2',
-        'hh_vbf_htt_htt_kvm0p758_k2v1p44_klm19p3',
-        'hh_vbf_htt_htt_kvm0p962_k2v0p959_klm1p43',
-        'hh_vbf_htt_htt_kvm1p21_k2v1p94_klm0p94',
-        'hh_vbf_htt_htt_kvm1p6_k2v2p72_klm1p36',
-        'hh_vbf_htt_htt_kvm1p83_k2v3p57_klm3p39',
-        'hh_vbf_htt_htt_kvm2p12_k2v3p87_klm5p96',
+        "hh_vbf_htt_htt_kv1p74_k2v1p37_kl14p4",
+        "hh_vbf_htt_htt_kvm0p012_k2v0p03_kl10p2",
+        "hh_vbf_htt_htt_kvm0p758_k2v1p44_klm19p3",
+        "hh_vbf_htt_htt_kvm0p962_k2v0p959_klm1p43",
+        "hh_vbf_htt_htt_kvm1p21_k2v1p94_klm0p94",
+        "hh_vbf_htt_htt_kvm1p6_k2v2p72_klm1p36",
+        "hh_vbf_htt_htt_kvm1p83_k2v3p57_klm3p39",
+        "hh_vbf_htt_htt_kvm2p12_k2v3p87_klm5p96",
         "hh_ggf_htt_hvv_kl1_kt1",
         "hh_ggf_htt_hvv_kl0_kt1",
         "hh_ggf_htt_hvv_kl5_kt1",
@@ -196,14 +199,14 @@ def add_config(
         "hh_vbf_htt_hvv_kvm1p6_k2v2p72",
         "hh_vbf_htt_hvv_kvm1p83_k2v3p57",
         "hh_vbf_htt_hvv_kvm2p12_k2v3p87",
-        'hh_vbf_htt_hvv_kv1p74_k2v1p37_kl14p4',
-        'hh_vbf_htt_hvv_kvm0p012_k2v0p03_kl10p2',
-        'hh_vbf_htt_hvv_kvm0p758_k2v1p44_klm19p3',
-        'hh_vbf_htt_hvv_kvm0p962_k2v0p959_klm1p43',
-        'hh_vbf_htt_hvv_kvm1p21_k2v1p94_klm0p94',
-        'hh_vbf_htt_hvv_kvm1p6_k2v2p72_klm1p36',
-        'hh_vbf_htt_hvv_kvm1p83_k2v3p57_klm3p39',
-        'hh_vbf_htt_hvv_kvm2p12_k2v3p87_klm5p96',
+        "hh_vbf_htt_hvv_kv1p74_k2v1p37_kl14p4",
+        "hh_vbf_htt_hvv_kvm0p012_k2v0p03_kl10p2",
+        "hh_vbf_htt_hvv_kvm0p758_k2v1p44_klm19p3",
+        "hh_vbf_htt_hvv_kvm0p962_k2v0p959_klm1p43",
+        "hh_vbf_htt_hvv_kvm1p21_k2v1p94_klm0p94",
+        "hh_vbf_htt_hvv_kvm1p6_k2v2p72_klm1p36",
+        "hh_vbf_htt_hvv_kvm1p83_k2v3p57_klm3p39",
+        "hh_vbf_htt_hvv_kvm2p12_k2v3p87_klm5p96",
         "hh_ggf_hvv_hvv_kl1_kt1",
         "hh_ggf_hvv_hvv_kl0_kt1",
         "hh_ggf_hvv_hvv_kl5_kt1",
@@ -217,14 +220,14 @@ def add_config(
         "hh_vbf_hvv_hvv_kvm1p6_k2v2p72",
         "hh_vbf_hvv_hvv_kvm1p83_k2v3p57",
         "hh_vbf_hvv_hvv_kvm2p12_k2v3p87",
-        'hh_vbf_hvv_hvv_kv1p74_k2v1p37_kl14p4',
-        'hh_vbf_hvv_hvv_kvm0p012_k2v0p03_kl10p2',
-        'hh_vbf_hvv_hvv_kvm0p758_k2v1p44_klm19p3',
-        'hh_vbf_hvv_hvv_kvm0p962_k2v0p959_klm1p43',
-        'hh_vbf_hvv_hvv_kvm1p21_k2v1p94_klm0p94',
-        'hh_vbf_hvv_hvv_kvm1p6_k2v2p72_klm1p36',
-        'hh_vbf_hvv_hvv_kvm1p83_k2v3p57_klm3p39',
-        'hh_vbf_hvv_hvv_kvm2p12_k2v3p87_klm5p96',
+        "hh_vbf_hvv_hvv_kv1p74_k2v1p37_kl14p4",
+        "hh_vbf_hvv_hvv_kvm0p012_k2v0p03_kl10p2",
+        "hh_vbf_hvv_hvv_kvm0p758_k2v1p44_klm19p3",
+        "hh_vbf_hvv_hvv_kvm0p962_k2v0p959_klm1p43",
+        "hh_vbf_hvv_hvv_kvm1p21_k2v1p94_klm0p94",
+        "hh_vbf_hvv_hvv_kvm1p6_k2v2p72_klm1p36",
+        "hh_vbf_hvv_hvv_kvm1p83_k2v3p57_klm3p39",
+        "hh_vbf_hvv_hvv_kvm2p12_k2v3p87_klm5p96",
     ]
     for process_name in process_names:
         if process_name in procs:
@@ -245,7 +248,7 @@ def add_config(
             proc.add_tag("signal")
             proc.add_tag("resonant_signal")
         if re.match(r"^tt(|_.+)$", process_name):
-             for _proc, _, _ in proc.walk_processes(include_self=True):
+            for _proc, _, _ in proc.walk_processes(include_self=True):
                 _proc.add_tag({"ttbar", "tt"})
         if re.match(r"^dy(|_.+)$", process_name):
             for _proc, _, _ in proc.walk_processes(include_self=True):
@@ -1243,7 +1246,6 @@ def add_config(
             unc_correction="Recoil_correction_Uncertainty",
         )
 
-
     ################################################################################################
     # shifts
     ################################################################################################
@@ -1541,7 +1543,7 @@ def add_config(
         add_external("electron_ss", (f"{json_mirror}/POG/EGM/{json_pog_era}/electronSS.json.gz", "v1"))
         add_external("hh_btag_repo", Ext(
             afsbase + "/work/m/mrieger/public/hbt/external_files/hh-btag-master-d7a71eb3.tar.gz",
-            subpaths=DotDict(even="hh-btag-master/models/HHbtag_v2_par_0", odd="hh-btag-master/models/HHbtag_v2_par_1"),
+            subpaths=DotDict(even="hh-btag-master/models/HHbtag_v2_par_0", odd="hh-btag-master/models/HHbtag_v2_par_1"),  # noqa: E501
             version="v2",
         ))
 
@@ -1557,7 +1559,7 @@ def add_config(
         # hh-btag repository with TF saved model directories trained on 22+23 samples using pnet
         add_external("hh_btag_repo", Ext(
             afsbase + "/work/m/mrieger/public/hbt/external_files/hh-btag-master-d7a71eb3.tar.gz",
-            subpaths=DotDict(even="hh-btag-master/models/HHbtag_v3_par_0", odd="hh-btag-master/models/HHbtag_v3_par_1"),
+            subpaths=DotDict(even="hh-btag-master/models/HHbtag_v3_par_0", odd="hh-btag-master/models/HHbtag_v3_par_1"),  # noqa: E501
             version="v3",
         ))
         # tau energy correction and scale factors

@@ -42,8 +42,8 @@ def patch_bundle_repo_exclude_files():
 @memoize
 def patch_remote_workflow_poll_interval():
     """
-    Patches the HTCondorWorkflow and SlurmWorkflow tasks to change the default value of the poll_interval parameter to 1
-    minute.
+    Patches the HTCondorWorkflow and SlurmWorkflow tasks to change the
+    default value of the poll_interval parameter to 1 minute.
     """
     from columnflow.tasks.framework.remote import HTCondorWorkflow, SlurmWorkflow
 
@@ -51,6 +51,7 @@ def patch_remote_workflow_poll_interval():
     SlurmWorkflow.poll_interval._default = 1.0  # minutes
 
     logger.debug(f"patched poll_interval._default of {HTCondorWorkflow.task_family} and {SlurmWorkflow.task_family}")
+
 
 @memoize
 def patch_merge_reduction_stats_inputs():
@@ -87,13 +88,14 @@ def patch_slurm_partition_setting():
     Patches the slurm remote workflow to allow setting things like partition
     by commandline instead of overiding with central default.
     """
-    import math
+    # import math
     from columnflow.tasks.framework.remote import RemoteWorkflow
-    RemoteWorkflow.exclude_params_branch.remove('slurm_partition')
-    RemoteWorkflow.slurm_partition.significant=True
+    RemoteWorkflow.exclude_params_branch.remove("slurm_partition")
+    RemoteWorkflow.slurm_partition.significant = True
 
-    RemoteWorkflow.exclude_params_branch.remove('slurm_flavor')
-    RemoteWorkflow.slurm_flavor._choices.add('manivald')
+    RemoteWorkflow.exclude_params_branch.remove("slurm_flavor")
+    RemoteWorkflow.slurm_flavor._choices.add("manivald")
+    # Does strangely disable the transfer of enviorment variables, not needed at the moment bu at TODO
     # def slurm_job_config(self, config, job_num, branches):
     #     # add common config settings
     #     self.add_common_configs(

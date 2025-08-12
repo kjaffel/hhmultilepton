@@ -14,6 +14,7 @@ from columnflow.util import maybe_import
 
 np = maybe_import("numpy")
 
+
 @deferred_column
 def IF_DATA(self: ArrayFunction.DeferredColumn, func: ArrayFunction) -> Any | set[Any]:
     return self.get() if func.dataset_inst.is_data else None
@@ -22,6 +23,7 @@ def IF_DATA(self: ArrayFunction.DeferredColumn, func: ArrayFunction) -> Any | se
 @deferred_column
 def IF_MC(self: ArrayFunction.DeferredColumn, func: ArrayFunction) -> Any | set[Any]:
     return self.get() if func.dataset_inst.is_mc else None
+
 
 @deferred_column
 def IF_NANO_V9(self: ArrayFunction.DeferredColumn, func: ArrayFunction) -> Any | set[Any]:
@@ -88,6 +90,7 @@ def IF_DATASET_IS_TT(
 
     return self.get() if func.dataset_inst.has_tag("ttbar") else None
 
+
 @deferred_column
 def IF_DATASET_IS_DY(
     self: ArrayFunction.DeferredColumn,
@@ -103,6 +106,7 @@ def IF_DATASET_IS_W_LNU(
 ) -> Any | set[Any]:
 
     return self.get() if func.dataset_inst.has_tag("w_lnu") else None
+
 
 @deferred_column
 def MET_COLUMN(self: ArrayFunction.DeferredColumn, func: ArrayFunction) -> Any | set[Any]:

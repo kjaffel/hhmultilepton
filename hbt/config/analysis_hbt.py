@@ -75,6 +75,7 @@ add_binning_hooks(analysis_hbt)
 # define configs
 #
 
+
 def add_lazy_config(
     *,
     campaign_module: str,

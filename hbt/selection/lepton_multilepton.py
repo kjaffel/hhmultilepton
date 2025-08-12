@@ -1031,7 +1031,6 @@ def lepton_selection(
             ids = ak.where(is_3mu, np.float32(trigger.id), np.float32(np.nan))
             matched_trigger_ids.append(ak.singletons(ak.nan_to_none(ids)))
 
-
         # 4mu channel
         if trigger.has_tag("single_mu") and (
             self.dataset_inst.is_mc or
