@@ -6,11 +6,11 @@ action() {
     local shell_is_zsh="$( [ -z "${ZSH_VERSION}" ] && echo "false" || echo "true" )"
     local this_file="$( ${shell_is_zsh} && echo "${(%):-%x}" || echo "${BASH_SOURCE[0]}" )"
     local this_dir="$( cd "$( dirname "${this_file}" )" && pwd )"
-    local hbt_dir="$( dirname "${this_dir}" )"
+    local multilepton_dir="$( dirname "${this_dir}" )"
 
     (
-        cd "${hbt_dir}" && \
-        flake8 hbt tests
+        cd "${multilepton_dir}" && \
+        flake8 multilepton tests
     )
 }
 action "$@"

@@ -13,7 +13,7 @@ import os
 import sys
 base = os.path.normpath(os.path.join(os.path.abspath(__file__), "../.."))
 sys.path.append(base)
-import hbt  # noqa
+import multilepton  # noqa
 
 # import all tests
 # ...

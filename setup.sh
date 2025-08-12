@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-setup_hbt() {
+setup_multilepton() {
     # Runs the project setup, leading to a collection of environment variables starting with either
     #   - "CF_", for controlling behavior implemented by columnflow, or
-    #   - "HBT_", for features provided by the analysis repository itself.
+    #   - "MULTILEPTON_", for features provided by the analysis repository itself.
     # Check the setup.sh in columnflow for documentation of the "CF_" variables. The purpose of all
-    # "HBT_" variables is documented below.
+    # "MULTILEPTON_" variables is documented below.
     #
     # The setup also handles the installation of the software stack via virtual environments, and
     # optionally an interactive setup where the user can configure certain variables.
@@ -22,9 +22,9 @@ setup_hbt() {
     #
     #
     # Variables defined by the setup and potentially required throughout the analysis:
-    #   HBT_BASE
+    #   MULTILEPTON_BASE
     #       The absolute analysis base directory. Used to infer file locations relative to it.
-    #   HBT_SETUP
+    #   MULTILEPTON_SETUP
     #       A flag that is set to 1 after the setup was successful.
 
     #
@@ -41,8 +41,8 @@ setup_hbt() {
     # prevent repeated setups
     #
 
-    cf_export_bool HBT_SETUP
-    if ${HBT_SETUP} && ! ${CF_ON_SLURM}; then
+    cf_export_bool MULTILEPTON_SETUP
+    if ${MULTILEPTON_SETUP} && ! ${CF_ON_SLURM}; then
         >&2 echo "the HH -> Multilepton analysis was already succesfully setup"
         >&2 echo "re-running the setup requires a new shell"
         return "1"
@@ -65,14 +65,14 @@ setup_hbt() {
 
     #
     # global variables
-    # (HBT = hh2bbtautau, CF = columnflow)
+    # (MULTILEPTON = hhmultilepton, CF = columnflow)
     #
 
     # start exporting variables
-    export HBT_BASE="${this_dir}"
+    export MULTILEPTON_BASE="${this_dir}"
     export CF_BASE="${cf_base}"
-    export CF_REPO_BASE="${HBT_BASE}"
-    export CF_REPO_BASE_ALIAS="HBT_BASE"
+    export CF_REPO_BASE="${MULTILEPTON_BASE}"
+    export CF_REPO_BASE_ALIAS="MULTILEPTON_BASE"
     export CF_SETUP_NAME="${setup_name}"
     export CF_SCHEDULER_HOST="${CF_SCHEDULER_HOST:-naf-cms14.desy.de}"
     export CF_SCHEDULER_PORT="${CF_SCHEDULER_PORT:-8088}"
@@ -104,7 +104,7 @@ setup_hbt() {
 
             # specific variables would go here
         }
-        cf_setup_interactive "${CF_SETUP_NAME}" "${HBT_BASE}/.setups/${CF_SETUP_NAME}.sh" || return "$?"
+        cf_setup_interactive "${CF_SETUP_NAME}" "${MULTILEPTON_BASE}/.setups/${CF_SETUP_NAME}.sh" || return "$?"
     fi
 
     # continue the fixed setup
@@ -125,14 +125,14 @@ setup_hbt() {
     cf_setup_software_stack "${CF_SETUP_NAME}" || return "$?"
 
     # ammend paths that are not covered by the central cf setup
-    export PATH="${HBT_BASE}/bin:${PATH}"
-    export PYTHONPATH="${HBT_BASE}:${HBT_BASE}/modules/cmsdb:${PYTHONPATH}"
+    export PATH="${MULTILEPTON_BASE}/bin:${PATH}"
+    export PYTHONPATH="${MULTILEPTON_BASE}:${MULTILEPTON_BASE}/modules/cmsdb:${PYTHONPATH}"
 
     # initialze submodules
-    if ! ${CF_REMOTE_ENV} && [ -e "${HBT_BASE}/.git" ]; then
+    if ! ${CF_REMOTE_ENV} && [ -e "${MULTILEPTON_BASE}/.git" ]; then
         local m
-        for m in $( ls -1q "${HBT_BASE}/modules" ); do
-            cf_init_submodule "${HBT_BASE}" "modules/${m}"
+        for m in $( ls -1q "${MULTILEPTON_BASE}/modules" ); do
+            cf_init_submodule "${MULTILEPTON_BASE}" "modules/${m}"
         done
     fi
 
@@ -152,14 +152,25 @@ setup_hbt() {
     # finalize
     #
 
-    export HBT_SETUP="true"
+    export MULTILEPTON_SETUP="true"
+}
+
+multilepton_show_banner() {
+    cat << EOF
+
+  $( cf_color blue_bright '||  || ||  || ')$( cf_color red_bright '      \\\  ' )$( cf_color blue_bright '||      ___  __   ====  ____  |\  |  ((  ' )
+  $( cf_color blue_bright '||==|| ||==|| ')$( cf_color red_bright 'HH>WZ𝜏))  ' )$( cf_color blue_bright '||     ||__ ||__)  ||   |  |  | \ |  \\\ ' )
+  $( cf_color blue_bright '||  || ||  || ')$( cf_color red_bright '      //  ' )$( cf_color blue_bright ' \\===  ||__ ||     ||   |__|  |  \|   ))' )
+
+EOF
 }
 
 main() {
     # Invokes the main action of this script, catches possible error codes and prints a message.
 
     # run the actual setup
-    if setup_hbt "$@"; then
+    if setup_multilepton "$@"; then
+        multilepton_show_banner
         cf_color green "HH -> Multilepton analysis successfully setup"
         return "0"
     else
@@ -170,6 +181,6 @@ main() {
 }
 
 # entry point
-if [ "${HBT_SKIP_SETUP}" != "true" ]; then
+if [ "${MULTILEPTON_SKIP_SETUP}" != "true" ]; then
     main "$@"
 fi
