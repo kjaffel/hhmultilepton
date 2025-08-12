@@ -1,63 +1,96 @@
-# HH → bb𝜏𝜏
+# HH → Multilepton
 
-[![Lint and test](https://github.com/uhh-cms/hh2bbtautau/actions/workflows/lint_and_test.yaml/badge.svg)](https://github.com/uhh-cms/hh2bbtautau/actions/workflows/lint_and_test.yaml)
+## Introduction
+This is the code base for the Run2+Run3 iteration of the CMS HH Multilepton analysis.
 
-## Quickstart
+The code is forked and for now heavily based on the UHH bersion of the [HH → bb𝜏𝜏 analysis](https://github.com/uhh-cms/hh2bbtautau)
+and still very much WIP. Expect remnants from the bb𝜏𝜏 analysis, crashes and bugs, you have been warned!
 
-A couple test tasks are listed below.
-They might require a **valid voms proxy** for accessing input data.
+Please make sure you are subscribed to our e-group: cms-hh-multilepton@cern.ch
+It controls the acess to our indico etc. and is a good way to get updates for our meetings.
+
+Also join our channel on [mattermost](https://mattermost.web.cern.ch/cms-exp/channels/hh-multilepton-run3).
+(You will need to join the CMS team first if not done so).
+
+The code is currently developed with the Tallinn T2 (and lxplus) in mind.
+If you need access to the T2, contact t\*\*\*\*.l\*\*\*\*@no-spam-cern.ch .
+
+## First time setup
 
 ```shell
 # clone the project
-git clone --recursive git@github.com:uhh-cms/hh2bbtautau.git
-cd hh2bbtautau
+git clone --recursive git@github.com:HEP-KBFI/hhmultilepton.git
+cd hhmultilepton
 
 # source the setup and store decisions in .setups/dev.sh (arbitrary name)
 source setup.sh dev
 
-# index existing tasks once to enable auto-completion for "law run"
-law index --verbose
+# Decisions include storage locations, these should be set according to the system you are running the code on:
+# CF_DATA should point to a location in home (manivald) or afs (lxplus), same as CF_SOFTWARE_BASE and CF_JOB_BASE
+# CF_WLCG_CACHE_ROOT is a cache for remote files (50 gb) should be on /local/user (manivald) or eos (lxplus).
 
-# run your first task
-# (they are all shipped with columnflow and thus have the "cf." prefix)
-law run cf.ReduceEvents \
-    --version v1 \
-    --dataset hh_ggf_bbtautau_madgraph \
-    --branch 0
+# After first time setup if on manivald, open the created setup file and add:
+export TMPDIR="/scratch/local/tolange"
 
-# create a plot
-law run cf.PlotVariables1D \
-    --version v1 \
-    --datasets hh_ggf_bbtautau_madgraph \
-    --producers default \
-    --variables jet1_pt \
-    --categories incl \
-    --branch 0
+# get a voms token:
 
-# create a (test) datacard (CMS-style)
-law run cf.CreateDatacards \
-    --version v1 \
-    --producers default \
-    --inference-model test \
-    --workers 3
+voms-proxy-init -voms cms -rfc -valid 196:00
 ```
 
-## Useful commands
+Code can now be run but first storage locations for the tasks outputs should be checked as configured [here](https://github.com/HEP-KBFI/hhmultilepton/blob/master/law_outputs.cfg#L26-L90)
+Currently outputs point to the user store of the T2 on manivald so that outputs are also accessible remotely, but we will likely adapt this over time depending on the output.
+I.e large outputs available in a remote reachable location, smaller ones on local stores. Larger ones likely also split by user/cluster so that central versions can be reused.
 
-### Full reduction
+After this is set, try to run on signal locally:
 
 ```shell
-law run cf.ReduceEventsWrapper \
-    --version prod1 \
-    --configs run3_2022_preEE \
-    --datasets "*" \
-    --shifts "nominal,{tune,hdamp,mtop}_{up,down}" \
-    --cf.ReduceEvents-workflow htcondor \
-    --cf.ReduceEvents-pilot \
-    --cf.ReduceEvents-tasks-per-job 3 \
-    --local-scheduler False \
-    --workers 6
+law run cf.PlotVariables1D \
+    --version test \
+    --producers default \
+    --variables nmu \
+    --datasets hh_ggf_htt_hvv_kl1_kt1_powheg \
+    --categories cat4l \
 ```
+
+And if this runs on background via slurm/condor
+
+```shell
+law run cf.PlotVariables1D \
+    --version test \
+    --producers default \
+    --variables nmu \
+    --datasets zz_pythia \
+    --categories cat4l \
+    --workflow slurm \
+```
+
+or with
+
+```shell
+    --workflow htcondor \
+```
+
+## Documentation
+TODO
+
+## 🙏 Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tolange"><img src="https://avatars.githubusercontent.com/u/11850680?s=96&v=4" width="100px;" alt="`Torben Lange`"/><br /><sub><b>Torben Lange</b></sub></a><br /><a href="https://github.com/HEP-KBFI/hhmultilepton/commits/master/?author=tolange" title="Code">💻</a> </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 
 ## Useful links
 
@@ -82,5 +115,8 @@ NanoAOD:
 
 ## Development
 
-- Source hosted at [GitHub](https://github.com/uhh-cms/hh2bbtautau)
-- Report issues, questions, feature requests on [GitHub Issues](https://github.com/uhh-cms/hh2bbtautau/issues)
+- Source hosted at [GitHub](https://github.com/HEP-KBFI/hhmultilepton)
+- Report issues, questions, feature requests on [GitHub Issues](https://github.com/HEP-KBFI/hhmultilepton/issues)
+- Ideally also ping us on MM
+- For new features open a new branch before merging into master, ask for a code review by a felllow contributor and dont forget linting!
+- Happy coding :)

@@ -43,7 +43,7 @@ setup_hbt() {
 
     cf_export_bool HBT_SETUP
     if ${HBT_SETUP} && ! ${CF_ON_SLURM}; then
-        >&2 echo "the HH -> bbtautau analysis was already succesfully setup"
+        >&2 echo "the HH -> Multilepton analysis was already succesfully setup"
         >&2 echo "re-running the setup requires a new shell"
         return "1"
     fi
@@ -160,7 +160,7 @@ main() {
 
     # run the actual setup
     if setup_hbt "$@"; then
-        cf_color green "HH -> bbtautau analysis successfully setup"
+        cf_color green "HH -> Multilepton analysis successfully setup"
         return "0"
     else
         local code="$?"
