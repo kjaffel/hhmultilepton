@@ -138,34 +138,34 @@ def add_variables(config: od.Config) -> None:
         binning=(40, 0, 2),
         x_title="Pileup weight",
     )
-    add_variable(
-        config,
-        name="normalized_pu_weight",
-        expression="normalized_pu_weight",
-        binning=(40, 0, 2),
-        x_title="Normalized pileup weight",
-    )
-    add_variable(
-        config,
-        name="btag_weight",
-        expression="btag_weight",
-        binning=(60, 0, 3),
-        x_title="b-tag weight",
-    )
-    add_variable(
-        config,
-        name="normalized_btag_weight",
-        expression="normalized_btag_weight",
-        binning=(60, 0, 3),
-        x_title="Normalized b-tag weight",
-    )
-    add_variable(
-        config,
-        name="normalized_njet_btag_weight",
-        expression="normalized_njet_btag_weight",
-        binning=(60, 0, 3),
-        x_title="$N_{jet}$ normalized b-tag weight",
-    )
+    # add_variable(
+    #     config,
+    #     name="normalized_pu_weight",
+    #     expression="normalized_pu_weight",
+    #     binning=(40, 0, 2),
+    #     x_title="Normalized pileup weight",
+    # )
+    # add_variable(
+    #     config,
+    #     name="btag_weight",
+    #     expression="btag_weight",
+    #     binning=(60, 0, 3),
+    #     x_title="b-tag weight",
+    # )
+    # add_variable(
+    #     config,
+    #     name="normalized_btag_weight",
+    #     expression="normalized_btag_weight",
+    #     binning=(60, 0, 3),
+    #     x_title="Normalized b-tag weight",
+    # )
+    # add_variable(
+    #     config,
+    #     name="normalized_njet_btag_weight",
+    #     expression="normalized_njet_btag_weight",
+    #     binning=(60, 0, 3),
+    #     x_title="$N_{jet}$ normalized b-tag weight",
+    # )
 
     # cutflow variables
     add_variable(

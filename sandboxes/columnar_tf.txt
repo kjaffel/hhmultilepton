@@ -1,5 +1,6 @@
-# version 9
+# version 10
 
 -r ../modules/columnflow/sandboxes/columnar.txt
 
+optree==0.16.0
 tensorflow~=2.16.1

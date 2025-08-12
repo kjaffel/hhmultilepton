@@ -17,8 +17,8 @@ logger = law.logger.get_logger(__name__)
 @memoize
 def patch_bundle_repo_exclude_files():
     """
-    Patches the exclude_files attribute of the existing BundleRepo task to exclude files
-    specific to _this_ analysis project.
+    Patches the exclude_files attribute of the existing BundleRepo task to exclude files specific to _this_ analysis
+    project.
     """
     from columnflow.tasks.framework.remote import BundleRepo
 
@@ -42,18 +42,27 @@ def patch_bundle_repo_exclude_files():
 @memoize
 def patch_remote_workflow_poll_interval():
     """
-    Patches the HTCondorWorkflow and SlurmWorkflow tasks to change the default value of the
-    poll_interval parameter to 30 seconds.
+    Patches the HTCondorWorkflow and SlurmWorkflow tasks to change the default value of the poll_interval parameter to 1
+    minute.
     """
     from columnflow.tasks.framework.remote import HTCondorWorkflow, SlurmWorkflow
 
-    HTCondorWorkflow.poll_interval._default = 0.5  # minutes
-    SlurmWorkflow.poll_interval._default = 0.5  # minutes
+    HTCondorWorkflow.poll_interval._default = 1.0  # minutes
+    SlurmWorkflow.poll_interval._default = 1.0  # minutes
 
-    logger.debug(
-        f"patched poll_interval._default of {HTCondorWorkflow.task_family} and "
-        f"{SlurmWorkflow.task_family}",
-    )
+    logger.debug(f"patched poll_interval._default of {HTCondorWorkflow.task_family} and {SlurmWorkflow.task_family}")
+
+@memoize
+def patch_merge_reduction_stats_inputs():
+    """
+    Patches the MergeReductionStats task to set the default value of n_inputs to -1, so as to use all files to infer
+    merging factors with full statistical precision.
+    """
+    from columnflow.tasks.reduction import MergeReductionStats
+
+    MergeReductionStats.n_inputs._default = -1
+
+    logger.debug(f"patched n_inputs default value of {MergeReductionStats.task_family}")
 
 
 @memoize
@@ -73,7 +82,69 @@ def patch_htcondor_workflow_naf_resources():
 
 
 @memoize
+def patch_slurm_partition_setting():
+    """
+    Patches the slurm remote workflow to allow setting things like partition
+    by commandline instead of overiding with central default.
+    """
+    import math
+    from columnflow.tasks.framework.remote import RemoteWorkflow
+    RemoteWorkflow.exclude_params_branch.remove('slurm_partition')
+    RemoteWorkflow.slurm_partition.significant=True
+
+    RemoteWorkflow.exclude_params_branch.remove('slurm_flavor')
+    RemoteWorkflow.slurm_flavor._choices.add('manivald')
+    # def slurm_job_config(self, config, job_num, branches):
+    #     # add common config settings
+    #     self.add_common_configs(
+    #         config,
+    #         {},
+    #         law_config=False,
+    #         voms=True,
+    #         kerberos=True,
+    #         wlcg=False,
+    #     )
+
+    #     # set job time
+    #     if self.max_runtime is not None:
+    #         job_time = law.util.human_duration(
+    #         seconds=int(math.floor(self.max_runtime * 3600)) - 1,
+    #         colon_format=True,
+    #         )
+    #         config.custom_content.append(("time", job_time))
+
+    #     # set nodes
+    #     config.custom_content.append(("nodes", 1))
+
+    #     # custom, flavor dependent settings
+    #     if self.slurm_flavor == "maxwell":
+    #         # nothing yet
+    #         pass
+    #     elif self.slurm_flavor == "manivald":
+    #         # nothing yet
+    #         pass
+    #     # render variales
+    #     config.render_variables["cf_bootstrap_name"] = "slurm"
+    #     config.render_variables.setdefault("cf_pre_setup_command", "")
+    #     config.render_variables.setdefault("cf_post_setup_command", "")
+    #     if self.slurm_flavor not in ("", law.NO_STR):
+    #         config.render_variables["cf_slurm_flavor"] = self.slurm_flavor
+
+    #     # forward env variables
+    #     for ev, rv in self.slurm_forward_env_variables.items():
+    #         config.render_variables[rv] = os.environ[ev]
+
+    #         return config
+    # RemoteWorkflow.slurm_job_config=slurm_job_config
+    # print(RemoteWorkflow.slurm_forward_env_variables)
+
+    logger.debug(f"patched slurm partition/flavor settings of {RemoteWorkflow.task_family}")
+
+
+@memoize
 def patch_all():
     patch_bundle_repo_exclude_files()
     patch_remote_workflow_poll_interval()
+    patch_slurm_partition_setting()
+    patch_merge_reduction_stats_inputs()
 #    patch_htcondor_workflow_naf_resources()
