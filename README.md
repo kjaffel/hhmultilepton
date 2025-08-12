@@ -37,6 +37,9 @@ export TMPDIR="/scratch/local/tolange"
 voms-proxy-init -voms cms -rfc -valid 196:00
 ```
 
+<img width="1336" height="506" alt="image" src="https://github.com/user-attachments/assets/29e6f810-e273-4b2e-9a80-02427e228298" />
+
+
 Code can now be run but first storage locations for the tasks outputs should be checked as configured [here](https://github.com/HEP-KBFI/hhmultilepton/blob/master/law_outputs.cfg#L26-L90)
 Currently outputs point to the user store of the T2 on manivald so that outputs are also accessible remotely, but we will likely adapt this over time depending on the output.
 I.e large outputs available in a remote reachable location, smaller ones on local stores. Larger ones likely also split by user/cluster so that central versions can be reused.
