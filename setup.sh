@@ -158,9 +158,9 @@ setup_multilepton() {
 multilepton_show_banner() {
     cat << EOF
 
-  $( cf_color blue_bright '||  || ||  || ')$( cf_color red_bright '      \\\  ' )$( cf_color blue_bright '||      ___  __   ====  ____  |\  |  ((  ' )
-  $( cf_color blue_bright '||==|| ||==|| ')$( cf_color red_bright 'HH>WZ𝜏))  ' )$( cf_color blue_bright '||     ||__ ||__)  ||   |  |  | \ |  \\\ ' )
-  $( cf_color blue_bright '||  || ||  || ')$( cf_color red_bright '      //  ' )$( cf_color blue_bright ' \\===  ||__ ||     ||   |__|  |  \|   ))' )
+  $( cf_color blue_bright '||  || ||  || ')$( cf_color red_bright '          \\\   ' )$( cf_color blue_bright '||      ___  __   ====  ____  |\  |  ((  ' )
+  $( cf_color blue_bright '||==|| ||==|| ')$( cf_color red_bright 'H->WW/ZZ/𝜏𝜏))  ' )$( cf_color blue_bright '||     ||__ ||__)  ||   |  |  | \ |  \\\ ' )
+  $( cf_color blue_bright '||  || ||  || ')$( cf_color red_bright '          //  ' )$( cf_color blue_bright ' \\\===  ||__ ||     ||   |__|  |  \|   ))' )
 
 EOF
 }
