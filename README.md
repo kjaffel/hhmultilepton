@@ -13,7 +13,7 @@ Also join our channel on [mattermost](https://mattermost.web.cern.ch/cms-exp/cha
 (You will need to join the CMS team first if not done so).
 
 The code is currently developed with the Tallinn T2 (and lxplus) in mind.
-If you need access to the T2, contact t\*\*\*\*.l\*\*\*\*@no-spam-cern.ch .
+For further questions please, contact t\*\*\*\*.l\*\*\*\*@no-spam-cern.ch .
 
 ## First time setup
 
@@ -27,10 +27,30 @@ source setup.sh dev
 
 # Decisions include storage locations, these should be set according to the system you are running the code on:
 # CF_DATA should point to a location in home (manivald) or afs (lxplus), same as CF_SOFTWARE_BASE and CF_JOB_BASE
-# CF_WLCG_CACHE_ROOT is a cache for remote files (50 gb) should be on /local/user (manivald) or eos (lxplus).
+# CF_WLCG_CACHE_ROOT is a cache for remote files should be on /local/user (manivald) or eos (lxplus).
 
-# After first time setup if on manivald, open the created setup file and add:
-export TMPDIR="/scratch/local/tolange"
+# suggestion for lxplus setup:
+
+export CF_DATA="$CF_REPO_BASE/data"
+export CF_SOFTWARE_BASE="$CF_DATA/software"
+export CF_JOB_BASE="$CF_DATA/jobs"
+export CF_STORE_NAME="cf_store"
+export CF_STORE_LOCAL="$CF_DATA/$CF_STORE_NAME"
+export CF_WLCG_CACHE_ROOT="/eos/user/$CF_CERN_USER_FIRSTCHAR/$CF_CERN_USER/HHMultilepton_Run3/cf_scratch"
+export CF_WLCG_USE_CACHE="true"
+export CF_WLCG_CACHE_CLEANUP="false"
+export CF_CRAB_STORAGE_ELEMENT="T2_EE_Estonia"
+export CF_CRAB_BASE_DIRECTORY="/store/user/$CF_CERN_USER/cf_crab_outputs"
+
+# if space in afs is a problem, one can try
+export CF_SOFTWARE_BASE="/eos/user/$CF_CERN_USER_FIRSTCHAR/$CF_CERN_USER/HHMultilepton_Run3/software"
+
+# suggestion for manivald is the same except:
+
+export CF_WLCG_CACHE_ROOT="/local/$CF_CERN_USER/HHMultilepton_Run3/cf_scratch"
+
+# After first time setup, *if on manivald the estonian login node*, open the created setup file and add:
+export TMPDIR="/scratch/local/$CF_CERN_USER"
 
 # get a voms token:
 
@@ -44,6 +64,8 @@ Code can now be run but first storage locations for the tasks outputs should be 
 Currently outputs point to the user store of the T2 on manivald so that outputs are also accessible remotely, but we will likely adapt this over time depending on the output.
 I.e large outputs available in a remote reachable location, smaller ones on local stores. Larger ones likely also split by user/cluster so that central versions can be reused.
 
+*Important* For development on lxplus *i strongly * advise to change wlcg_fs_manivald to wlcg_fs_cernbox in the beginning.
+
 After this is set, try to run on signal locally:
 
 ```shell
@@ -52,7 +74,6 @@ law run cf.PlotVariables1D \
     --producers default \
     --variables nmu \
     --datasets hh_ggf_htt_hvv_kl1_kt1_powheg \
-    --categories cat4l \
 ```
 
 And if this runs on background via slurm/condor
@@ -63,7 +84,6 @@ law run cf.PlotVariables1D \
     --producers default \
     --variables nmu \
     --datasets zz_pythia \
-    --categories cat4l \
     --workflow slurm \
 ```
 
@@ -73,8 +93,10 @@ or with
     --workflow htcondor \
 ```
 
+crab to be tested.
+
 ## Documentation
-TODO
+TODO but a general overview can be found in these slides: https://indico.cern.ch/event/1580193/contributions/6660044/attachments/3121091/5534653/multilep%20framework.pdf
 
 ## 🙏 Contributors
 
@@ -85,6 +107,7 @@ TODO
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tolange"><img src="https://avatars.githubusercontent.com/u/11850680?s=96&v=4" width="100px;" alt="`Torben Lange`"/><br /><sub><b>Torben Lange</b></sub></a><br /><a href="https://github.com/HEP-KBFI/hhmultilepton/commits/master/?author=tolange" title="Code">💻</a> </td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MatheuspCoelho"><img src="https://avatars.githubusercontent.com/u/85200761?v=4" width="100px;" alt="`Matheus Coelho`"/><br /><sub><b>Matheus Coelho</b></sub></a><br /><a href="https://github.com/HEP-KBFI/hhmultilepton/commits/master/?author=MatheuspCoelho" title="Code">💻</a> </td>
     </tr>
   </tbody>
 </table>
