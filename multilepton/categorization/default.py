@@ -161,6 +161,58 @@ def cat_4l(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.
     catmask = catmask | (events.channel_id == self.config_inst.channels.n.c4mu.id)
     return events, catmask
 
+
+#The BDT category overlaps with our channels, so we need tight/trigger-matched flags individual for this cat
+@categorizer(uses={"ok_bdt_eormu"})
+def cat_e_or_mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    return events, events.ok_bdt_eormu == 1
+
+@categorizer(uses={"tight_sel_bdt"})
+def cat_tight_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # tight true
+    return events, events.tight_sel_bdt == 1
+
+@categorizer(uses={"tight_sel_bdt"})
+def cat_nontight_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # tight false
+    return events, events.tight_sel_bdt == 0
+
+@categorizer(uses={"trig_match_bdt"})
+def cat_trigmatch_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # trig match
+    return events, events.trig_match_bdt == 1
+
+@categorizer(uses={"trig_match_bdt"})
+def cat_nontrigmatch_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # trig match false
+    return events, events.trig_match_bdt == 0
+
+
+#tight and trigger matching flags for the physical channels
+@categorizer(uses={"tight_sel"})
+def cat_tight(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # tight true
+    return events, events.tight_sel == 1
+
+
+@categorizer(uses={"tight_sel"})
+def cat_nontight(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # tight false
+    return events, events.tight_sel == 0
+
+
+@categorizer(uses={"trig_match"})
+def cat_trigmatch(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # trig match
+    return events, events.trig_match == 1
+
+@categorizer(uses={"trig_match"})
+def cat_nontrigmatch(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    # trig match false
+    return events, events.trig_match == 0
+
+
+
 #
 # QCD regions
 #
