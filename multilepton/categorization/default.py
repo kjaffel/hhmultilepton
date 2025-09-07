@@ -98,7 +98,7 @@ def cat_ce3mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, 
 
 @categorizer(uses={"channel_id"})
 def cat_c4mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.ce3mu.id
+    return events, events.channel_id == self.config_inst.channels.n.c4mu.id
 
 # to be implemented
 # @categorizer(uses={"channel_id"})
@@ -161,6 +161,25 @@ def cat_4l(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.
     catmask = catmask | (events.channel_id == self.config_inst.channels.n.c4mu.id)
     return events, catmask
 
+
+#bveto
+@categorizer(uses={"Jet.btagPNetB"})
+def cat_bveto_on(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    wp_loose = self.config_inst.x.btag_working_points["particleNet"]["loose"]
+    wp_medium = self.config_inst.x.btag_working_points["particleNet"]["medium"]
+    tagged_loose = events.Jet.btagPNetB > wp_loose
+    tagged_medium = events.Jet.btagPNetB > wp_medium
+    veto = (ak.sum(tagged_loose, axis=1) < 2)  &  (ak.sum(tagged_medium, axis=1) < 1)
+    return events, veto
+
+@categorizer(uses={"Jet.btagPNetB"})
+def cat_bveto_off(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+    wp_loose = self.config_inst.x.btag_working_points["particleNet"]["loose"]
+    wp_medium = self.config_inst.x.btag_working_points["particleNet"]["medium"]
+    tagged_loose = events.Jet.btagPNetB > wp_loose
+    tagged_medium = events.Jet.btagPNetB > wp_medium
+    nonveto = (ak.sum(tagged_loose, axis=1) >= 2)  |  (ak.sum(tagged_medium, axis=1) >= 1)
+    return events, nonveto
 
 #The BDT category overlaps with our channels, so we need tight/trigger-matched flags individual for this cat
 @categorizer(uses={"ok_bdt_eormu"})

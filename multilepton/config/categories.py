@@ -49,6 +49,10 @@ def add_categories(config: od.Config) -> None:
     # _add_category(config, name="cmu3tau", id=24, selection="cat_cmu3tau", label=config.channels.n.cmu3tau.label)
     # _add_category(config, name="c4tau", id=25, selection="cat_c4tau", label=config.channels.n.c4tau.label)
 
+    #bveto
+    _add_category(config, name="bveto_on", id=30001, selection="cat_bveto_on", label="bveto on")
+    _add_category(config, name="bveto_off", id=30002, selection="cat_bveto_off", label="bveto off")
+
     #Loose category for BDT trainning + tight + trigmatch# 
     _add_category(config, name="ceormu", id=10000, selection="cat_e_or_mu", label=r"e or $\mu$", tags={"ceormu"})
     #tight/nontight
@@ -150,6 +154,7 @@ def add_categories(config: od.Config) -> None:
         				           is_complete=True,  has_overlap=False),
         "sel": CategoryGroup(["tight", "nontight"], is_complete=False, has_overlap=False),
         "trig": CategoryGroup(["trigmatch", "nontrigmatch"], is_complete=True, has_overlap=False),
+        "vetobtag": CategoryGroup(["bveto_on", "bveto_off"], is_complete=True, has_overlap=False),        
     }
 
     create_category_combinations(
@@ -163,6 +168,7 @@ def add_categories(config: od.Config) -> None:
         "loose_ch": CategoryGroup(["ceormu"], is_complete=False,  has_overlap=False),
         "sel": CategoryGroup(["tight_bdt", "nontight_bdt"], is_complete=False, has_overlap=False),
         "trig": CategoryGroup(["trigmatch_bdt", "nontrigmatch_bdt"], is_complete=True, has_overlap=False),
+        "vetobtag": CategoryGroup(["bveto_on", "bveto_off"], is_complete=True, has_overlap=False),        
     }
 
     create_category_combinations(
