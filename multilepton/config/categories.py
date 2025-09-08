@@ -121,7 +121,7 @@ def add_categories(config: od.Config) -> None:
             "label": ", ".join([
                 cat.label or cat.name
                 for cat in categories.values()
-                if cat.name != "os"  # os is the default
+                #if cat.name != "os"  # os is the default
             ]) or None,
         }
 
@@ -154,7 +154,8 @@ def add_categories(config: od.Config) -> None:
         				           is_complete=True,  has_overlap=False),
         "sel": CategoryGroup(["tight", "nontight"], is_complete=False, has_overlap=False),
         "trig": CategoryGroup(["trigmatch", "nontrigmatch"], is_complete=True, has_overlap=False),
-        "vetobtag": CategoryGroup(["bveto_on", "bveto_off"], is_complete=True, has_overlap=False),        
+        "vetobtag": CategoryGroup(["bveto_on", "bveto_off"], is_complete=True, has_overlap=False),
+        "sign": CategoryGroup(["os", "ss"], is_complete=True, has_overlap=False),      
     }
 
     create_category_combinations(
