@@ -393,6 +393,10 @@ def empty_call(
     events = set_ak_column(events, "tau2_isolated", np.zeros(len(events), dtype=bool))
     events = set_ak_column(events, "cross_triggered", np.zeros(len(events), dtype=bool))
     events = set_ak_column(events, "single_triggered", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "tight_sel", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "trig_match", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "tight_sel_bdt", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "trig_match_bdt", np.zeros(len(events), dtype=bool))
 
     # store number of jets for stats and histograms
     events = set_ak_column(events, "n_jets_stats", ak.num(events.Jet, axis=1), value_type=np.int32)

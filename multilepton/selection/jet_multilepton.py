@@ -19,7 +19,7 @@ from columnflow.columnar_util import (
 from columnflow.util import maybe_import
 
 from multilepton.production.hhbtag import hhbtag
-from multilepton.selection.lepton import trigger_object_matching
+from multilepton.selection.lepton_multilepton import trigger_object_matching
 from multilepton.util import IF_RUN_2
 
 np = maybe_import("numpy")
