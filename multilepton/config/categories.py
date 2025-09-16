@@ -49,6 +49,29 @@ def add_categories(config: od.Config) -> None:
     # _add_category(config, name="cmu3tau", id=24, selection="cat_cmu3tau", label=config.channels.n.cmu3tau.label)
     # _add_category(config, name="c4tau", id=25, selection="cat_c4tau", label=config.channels.n.c4tau.label)
 
+    #bveto
+    _add_category(config, name="bveto_on", id=30001, selection="cat_bveto_on", label="bveto on")
+    _add_category(config, name="bveto_off", id=30002, selection="cat_bveto_off", label="bveto off")
+
+    #Loose category for BDT trainning + tight + trigmatch# 
+    _add_category(config, name="ceormu", id=10000, selection="cat_e_or_mu", label=r"e or $\mu$", tags={"ceormu"})
+    #tight/nontight
+    _add_category(config, name="tight_bdt", id=11000, selection="cat_tight_bdt", label="tight", tags={"tight_bdt"})
+    _add_category(config, name="nontight_bdt", id=12000, selection="cat_nontight_bdt", label="fakeable", tags={"nontight_bdt"})
+    #trigmatch
+    _add_category(config, name="trigmatch_bdt", id=13000, selection="cat_trigmatch_bdt", label="trigger matched", tags={"trigmatch_bdt"})
+    _add_category(config, name="nontrigmatch_bdt", id=14000, selection="cat_nontrigmatch_bdt", label="trigger unmatched", tags={"nontrigmatch_bdt"})
+
+
+    #tight/nontight
+    _add_category(config, name="tight", id=10001, selection="cat_tight", label="tight", tags={"tight"})
+    _add_category(config, name="nontight", id=10002, selection="cat_nontight", label="fakeable", tags={"nontight"})
+    #trigmatch
+    _add_category(config, name="trigmatch", id=10003, selection="cat_trigmatch", label="trigger matched", tags={"trigmatch"})
+    _add_category(config, name="nontrigmatch", id=10004, selection="cat_nontrigmatch", label="trigger unmatched", tags={"nontrigmatch"})
+    ######################################################
+
+
     # qcd regions
     _add_category(config, name="os", id=10, selection="cat_os", label="OS", tags={"os"})
     _add_category(config, name="ss", id=11, selection="cat_ss", label="SS", tags={"ss"})
@@ -98,7 +121,7 @@ def add_categories(config: od.Config) -> None:
             "label": ", ".join([
                 cat.label or cat.name
                 for cat in categories.values()
-                if cat.name != "os"  # os is the default
+                #if cat.name != "os"  # os is the default
             ]) or None,
         }
 
@@ -119,6 +142,47 @@ def add_categories(config: od.Config) -> None:
         name_fn=name_fn,
         kwargs_fn=functools.partial(kwargs_fn, add_qcd_group=True),
     )
+
+
+
+
+
+###############################################################################    
+    #Creating category combinations
+    categories_sig_sideband = {
+        "channel": CategoryGroup(["c3e", "c3mu", "c2emu", "ce2mu", "c4e", "c4mu", "c2e2mu", "c3emu", "ce3mu"],
+        				           is_complete=True,  has_overlap=False),
+        "sel": CategoryGroup(["tight", "nontight"], is_complete=False, has_overlap=False),
+        "trig": CategoryGroup(["trigmatch", "nontrigmatch"], is_complete=True, has_overlap=False),
+        "vetobtag": CategoryGroup(["bveto_on", "bveto_off"], is_complete=True, has_overlap=False),
+        "sign": CategoryGroup(["os", "ss"], is_complete=True, has_overlap=False),      
+    }
+
+    create_category_combinations(
+        config=config,
+        categories=categories_sig_sideband,
+        name_fn=name_fn,
+        kwargs_fn=functools.partial(kwargs_fn, add_qcd_group=False),
+    )
+
+    bdt_categories = {
+        "loose_ch": CategoryGroup(["ceormu"], is_complete=False,  has_overlap=False),
+        "sel": CategoryGroup(["tight_bdt", "nontight_bdt"], is_complete=False, has_overlap=False),
+        "trig": CategoryGroup(["trigmatch_bdt", "nontrigmatch_bdt"], is_complete=True, has_overlap=False),
+        "vetobtag": CategoryGroup(["bveto_on", "bveto_off"], is_complete=True, has_overlap=False),        
+    }
+
+    create_category_combinations(
+        config=config,
+        categories=bdt_categories,
+        name_fn=name_fn,
+        kwargs_fn=functools.partial(kwargs_fn, add_qcd_group=False),
+    )
+##############################################################################
+
+
+
+
 
     # control categories
     control_categories = {
