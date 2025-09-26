@@ -162,15 +162,16 @@ def cat_4l(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.
     return events, catmask
 
 
-#bveto
+# bveto
 @categorizer(uses={"Jet.btagPNetB"})
 def cat_bveto_on(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     wp_loose = self.config_inst.x.btag_working_points["particleNet"]["loose"]
     wp_medium = self.config_inst.x.btag_working_points["particleNet"]["medium"]
     tagged_loose = events.Jet.btagPNetB > wp_loose
     tagged_medium = events.Jet.btagPNetB > wp_medium
-    veto = (ak.sum(tagged_loose, axis=1) < 2)  &  (ak.sum(tagged_medium, axis=1) < 1)
+    veto = (ak.sum(tagged_loose, axis=1) < 2) & (ak.sum(tagged_medium, axis=1) < 1)
     return events, veto
+
 
 @categorizer(uses={"Jet.btagPNetB"})
 def cat_bveto_off(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
@@ -178,28 +179,33 @@ def cat_bveto_off(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Arr
     wp_medium = self.config_inst.x.btag_working_points["particleNet"]["medium"]
     tagged_loose = events.Jet.btagPNetB > wp_loose
     tagged_medium = events.Jet.btagPNetB > wp_medium
-    nonveto = (ak.sum(tagged_loose, axis=1) >= 2)  |  (ak.sum(tagged_medium, axis=1) >= 1)
+    nonveto = (ak.sum(tagged_loose, axis=1) >= 2) | (ak.sum(tagged_medium, axis=1) >= 1)
     return events, nonveto
 
-#The BDT category overlaps with our channels, so we need tight/trigger-matched flags individual for this cat
+
+# The BDT category overlaps with our channels, so we need tight/trigger-matched flags individual for this cat
 @categorizer(uses={"ok_bdt_eormu"})
 def cat_e_or_mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     return events, events.ok_bdt_eormu == 1
+
 
 @categorizer(uses={"tight_sel_bdt"})
 def cat_tight_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     # tight true
     return events, events.tight_sel_bdt == 1
 
+
 @categorizer(uses={"tight_sel_bdt"})
 def cat_nontight_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     # tight false
     return events, events.tight_sel_bdt == 0
 
+
 @categorizer(uses={"trig_match_bdt"})
 def cat_trigmatch_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     # trig match
     return events, events.trig_match_bdt == 1
+
 
 @categorizer(uses={"trig_match_bdt"})
 def cat_nontrigmatch_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
@@ -207,7 +213,7 @@ def cat_nontrigmatch_bdt(self: Categorizer, events: ak.Array, **kwargs) -> tuple
     return events, events.trig_match_bdt == 0
 
 
-#tight and trigger matching flags for the physical channels
+# tight and trigger matching flags for the physical channels
 @categorizer(uses={"tight_sel"})
 def cat_tight(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     # tight true
@@ -225,17 +231,16 @@ def cat_trigmatch(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Arr
     # trig match
     return events, events.trig_match == 1
 
+
 @categorizer(uses={"trig_match"})
 def cat_nontrigmatch(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     # trig match false
     return events, events.trig_match == 0
 
 
-
 #
 # QCD regions
 #
-
 
 @categorizer(uses={"leptons_os"})
 def cat_os(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:

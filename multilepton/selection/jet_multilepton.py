@@ -18,7 +18,7 @@ from columnflow.columnar_util import (
 )
 from columnflow.util import maybe_import
 
-from multilepton.production.hhbtag import hhbtag
+# from multilepton.production.hhbtag import hhbtag
 from multilepton.selection.lepton_multilepton import trigger_object_matching
 from multilepton.util import IF_RUN_2
 
@@ -28,14 +28,14 @@ ak = maybe_import("awkward")
 
 @selector(
     uses={
-        jet_id, fatjet_id, hhbtag,
+        jet_id, fatjet_id,  # hhbtag,
         "fired_trigger_ids", "TrigObj.{pt,eta,phi}",
         "Jet.{pt,eta,phi,mass,jetId}", IF_RUN_2("Jet.puId"),
         "FatJet.{pt,eta,phi,mass,msoftdrop,jetId,subJetIdx1,subJetIdx2}",
         "SubJet.{pt,eta,phi,mass,btagDeepB}",
     },
     produces={
-        hhbtag,
+        # hhbtag,
         "Jet.hhbtag", "matched_trigger_ids",
     },
 )
@@ -69,10 +69,13 @@ def jet_selection(
     # default jet selection
     #
 
+    # ak.all(events.Jet.metric_table(lepton_results.x.leading_taus) > 0.5, axis=2)
     # common ak4 jet mask for normal and vbf jets
     ak4_mask = (
         (events.Jet.jetId == 6) &  # tight plus lepton veto
-        ak.all(events.Jet.metric_table(lepton_results.x.leading_taus) > 0.5, axis=2)
+        ak.all(events.Jet.metric_table(events.Tau[lepton_results.x.taus]) > 0.5, axis=2) &
+        ak.all(events.Jet.metric_table(events.Muon[lepton_results.x.mus]) > 0.5, axis=2) &
+        ak.all(events.Jet.metric_table(events.Electron[lepton_results.x.eles]) > 0.5, axis=2)
     )
 
     # puId for run 2
@@ -93,8 +96,10 @@ def jet_selection(
     # hhb-jet identification
     #
 
-    events = self[hhbtag](events, default_mask, lepton_results.x.lepton_pair, **kwargs)
-    hhbtag_scores = events.hhbtag_score
+    # events = self[hhbtag](events, default_mask, lepton_results.x.lepton_pair, **kwargs)
+    # hhbtag_scores = events.hhbtag_score
+    # just set hhbtag to zero for now, later remove
+    hhbtag_scores = 0 * events.Jet.pt
 
     # create a mask where only the two highest scoring hhbjets are selected
     score_indices = ak.argsort(hhbtag_scores, axis=1, ascending=False)
@@ -267,11 +272,13 @@ def jet_selection(
         (events.FatJet.msoftdrop > 30.0) &
         (events.FatJet.pt > 250.0) &  # ParticleNet not trained for lower values
         (abs(events.FatJet.eta) < 2.5) &
-        ak.all(events.FatJet.metric_table(lepton_results.x.leading_taus) > 0.8, axis=2) &
+        ak.all(events.FatJet.metric_table(events.Tau[lepton_results.x.taus]) > 0.8, axis=2) &
+        ak.all(events.FatJet.metric_table(events.Muon[lepton_results.x.mus]) > 0.8, axis=2) &
+        ak.all(events.FatJet.metric_table(events.Electron[lepton_results.x.eles]) > 0.8, axis=2) &
         (events.FatJet.subJetIdx1 >= 0) &
         (events.FatJet.subJetIdx2 >= 0)
     )
-
+    # ak.all(events.FatJet.metric_table(lepton_results.x.leading_taus) > 0.8, axis=2) &
     # store fatjet and subjet indices
     fatjet_indices = ak.local_index(events.FatJet.pt)[fatjet_mask]
     subjet_indices = ak.concatenate(

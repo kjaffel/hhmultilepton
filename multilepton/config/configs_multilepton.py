@@ -1612,15 +1612,16 @@ def add_config(
             # event info
             "deterministic_seed",
             # object info
-            "Jet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
-            "HHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
-            "NonHHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
-            "VBFJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
+            "Jet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
+            "HHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
+            "NonHHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
+            "VBFJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
             "FatJet.*",
             "SubJet{1,2}.*",
             "Electron.*",
             "Muon.*",
             "Tau.*",
+            "GenPart*",
             f"{cfg.x.met_name}.{{pt,phi,significance,covXX,covXY,covYY}}",
             "PV.npvs",
             # keep all columns added during selection and reduction, but skip cutflow features
@@ -1818,5 +1819,8 @@ def add_config(
             f"local_fs_{cfg.campaign.x.custom['name']}",
             f"wlcg_fs_{cfg.campaign.x.custom['name']}",
         ]
-
+        # print(cfg.get_category("ceormu__tight_bdt__trigmatch_bdt__bveto_on"), "???????????/")
+        # print(cfg.get_category("ceormu__tight_bdt__nontrigmatch_bdt__bveto_on"), "???????????/")
+        # print(cfg.get_category("ceormu__nontight_bdt__trigmatch_bdt__bveto_on"), "???????????/")
+        # print(cfg.get_category("ceormu__nontight_bdt__nontrigmatch_bdt__bveto_on"), "???????????/")
     return cfg
