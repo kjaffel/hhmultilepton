@@ -32,7 +32,7 @@ analysis_multilepton.x.versions = {}
 # (used in cf.HTCondorWorkflow)
 analysis_multilepton.x.bash_sandboxes = [
     "$CF_BASE/sandboxes/cf.sh",
-    "$CF_BASE/sandboxes/venv_columnar.sh",
+    "$MULTILEPTON_BASE/sandboxes/venv_columnar.sh",
     "$MULTILEPTON_BASE/sandboxes/venv_columnar_tf.sh",
 ]
 

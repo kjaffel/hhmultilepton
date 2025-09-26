@@ -72,7 +72,7 @@ def jet_selection(
     # ak.all(events.Jet.metric_table(lepton_results.x.leading_taus) > 0.5, axis=2)
     # common ak4 jet mask for normal and vbf jets
     ak4_mask = (
-        (events.Jet.jetId == 6) &  # tight plus lepton veto
+        ((events.Jet.jetId == 6) | (events.Jet.jetId == 2)) &  # tight (ignore inbuild lep veto)
         ak.all(events.Jet.metric_table(events.Tau[lepton_results.x.taus]) > 0.5, axis=2) &
         ak.all(events.Jet.metric_table(events.Muon[lepton_results.x.mus]) > 0.5, axis=2) &
         ak.all(events.Jet.metric_table(events.Electron[lepton_results.x.eles]) > 0.5, axis=2)

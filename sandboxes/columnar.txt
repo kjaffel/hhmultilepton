@@ -1,0 +1,4 @@
+# version 18
+-r ../modules/columnflow/sandboxes/columnar.txt
+
+boost-histogram==1.5.2
