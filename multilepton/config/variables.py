@@ -3,15 +3,15 @@
 """
 Definition of variables.
 """
-from functools import partial
 
 import order as od
+
+from functools import partial
 
 from columnflow.columnar_util import EMPTY_FLOAT, attach_coffea_behavior, default_coffea_collections
 from columnflow.util import maybe_import
 
 ak = maybe_import("awkward")
-
 
 def add_variables(config: od.Config) -> None:
     """
@@ -622,7 +622,6 @@ def add_variables(config: od.Config) -> None:
         binning=(66, -3.3, 3.3),
         x_title=r"Subleading muon $\phi$",
     )
-
     add_variable(
         config,
         name="njets",
@@ -631,7 +630,6 @@ def add_variables(config: od.Config) -> None:
         binning=(11, -0.5, 10.5),
         x_title=r"Number of jets",
     )
-
     add_variable(
         config,
         name="nmu",
@@ -640,7 +638,6 @@ def add_variables(config: od.Config) -> None:
         binning=(11, -0.5, 10.5),
         x_title=r"Number of muons",
     )
-
     add_variable(
         config,
         name="nlep",
@@ -664,7 +661,6 @@ def add_variables(config: od.Config) -> None:
         unit="GeV",
         x_title="$m_{4\ell}$",  # noqa: W605
     )
-
     add_variable(
         config,
         name="nele",
@@ -673,7 +669,6 @@ def add_variables(config: od.Config) -> None:
         binning=(11, -0.5, 10.5),
         x_title=r"Number of electrons",
     )
-
     add_variable(
         config,
         name="ntau",
@@ -692,7 +687,6 @@ def add_variables(config: od.Config) -> None:
             binning=(25, 0.0, 1.0),
             x_title=rf"{proc.upper()} output node, res. pDNN$_{{m_{{HH}}=500\,GeV,s=0}}$",
         )
-
         # outputs of the resonant DNN trained over flat masses
         add_variable(
             config,
@@ -701,7 +695,6 @@ def add_variables(config: od.Config) -> None:
             binning=(25, 0.0, 1.0),
             x_title=rf"{proc.upper()} output node, res. DNN",
         )
-
         add_variable(
             config,
             name=f"res_dnn_{proc}_fine",
@@ -714,14 +707,11 @@ def add_variables(config: od.Config) -> None:
 # helper to add a variable to the config with some defaults
 def add_variable(config: od.Config, *args, **kwargs) -> od.Variable:
     kwargs.setdefault("null_value", EMPTY_FLOAT)
-
     # create the variable
     variable = config.add_variable(*args, **kwargs)
-
     # defaults
     if not variable.has_aux("underflow"):
         variable.x.underflow = True
     if not variable.has_aux("overflow"):
         variable.x.overflow = True
-
     return variable

@@ -10,23 +10,19 @@ setup_multilepton() {
     # The setup also handles the installation of the software stack via virtual environments, and
     # optionally an interactive setup where the user can configure certain variables.
     #
-    #
     # Arguments:
     #   1. The name of the setup. "default" (which is itself the default when no name is set)
     #      triggers a setup with good defaults, avoiding all queries to the user and the writing of
     #      a custom setup file. See "interactive_setup()" for more info.
     #
-    #
     # Optinally preconfigured environment variables:
     #   None yet.
-    #
     #
     # Variables defined by the setup and potentially required throughout the analysis:
     #   MULTILEPTON_BASE
     #       The absolute analysis base directory. Used to infer file locations relative to it.
     #   MULTILEPTON_SETUP
     #       A flag that is set to 1 after the setup was successful.
-
     #
     # load cf setup helpers
     #
@@ -77,7 +73,7 @@ setup_multilepton() {
     export CF_SCHEDULER_HOST="${CF_SCHEDULER_HOST:-naf-cms14.desy.de}"
     export CF_SCHEDULER_PORT="${CF_SCHEDULER_PORT:-8088}"
 
-        # default job flavor settings (starting with naf / maxwell cluster defaults)
+    # default job flavor settings (starting with naf / maxwell cluster defaults)
     # used by law.cfg and, in turn, tasks/framework/remote.py
     local cf_htcondor_flavor_default="cern_el9"
     local cf_slurm_flavor_default="manivald"
@@ -101,7 +97,6 @@ setup_multilepton() {
 
             # query common variables
             cf_setup_interactive_common_variables
-
             # specific variables would go here
         }
         cf_setup_interactive "${CF_SETUP_NAME}" "${MULTILEPTON_BASE}/.setups/${CF_SETUP_NAME}.sh" || return "$?"
@@ -165,9 +160,9 @@ multilepton_show_banner() {
 EOF
 }
 
+
 main() {
     # Invokes the main action of this script, catches possible error codes and prints a message.
-
     # run the actual setup
     if setup_multilepton "$@"; then
         multilepton_show_banner

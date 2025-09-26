@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-Configuration of the HH → bb𝜏𝜏 analysis.
+Configuration of the HH → multi-leptons analysis.
 """
 
 from __future__ import annotations
@@ -10,7 +10,6 @@ import os
 import re
 import itertools
 import functools
-
 import yaml
 import law
 import order as od
@@ -18,17 +17,16 @@ from scinum import Number
 
 from columnflow.tasks.external import ExternalFile as Ext
 from columnflow.util import DotDict, dev_sandbox
+from columnflow.columnar_util import ColumnCollection, skip_column
 from columnflow.config_util import (
     get_root_processes_from_campaign, add_shift_aliases, get_shifts_from_sources, verify_config_processes,
 )
-from columnflow.columnar_util import ColumnCollection, skip_column
 
+from multilepton.config.styles import stylize_processes
 
-thisdir = os.path.dirname(os.path.abspath(__file__))
 
 logger = law.logger.get_logger(__name__)
-
-import os
+thisdir = os.path.dirname(os.path.abspath(__file__))
 afsbase = "/afs/cern.ch/"
 cvmfsbase = "/cvmfs/"
 if not os.path.isdir(afsbase):
@@ -38,7 +36,7 @@ if not os.path.isdir(afsbase):
         cvmfsbase = "/local/tolange/afsmirror/cvmfs/"
     else:
         raise Exception(
-            "afs not reachable and no mirrir set, please fix configs_multilepton and make external files available!",
+            "afs not reachable and no mirror is set, please fix configs_multilepton and make external files available!",
         )
 
 
@@ -54,14 +52,11 @@ def add_config(
     run = campaign.x.run
     year = campaign.x.year
     year2 = year % 100
-
     # some validations
     assert run in {2, 3}
     assert year in {2016, 2017, 2018, 2022, 2023}
-
     # get all root processes
     procs = get_root_processes_from_campaign(campaign)
-
     # create a config by passing the campaign, so id and name will be identical
     cfg = od.Config(
         name=config_name,
@@ -75,7 +70,6 @@ def add_config(
     ################################################################################################
     # helpers
     ################################################################################################
-
     # helper to enable processes / datasets only for a specific era
     def _match_era(
         *,
@@ -104,7 +98,6 @@ def add_config(
     ################################################################################################
     # processes
     ################################################################################################
-
     # add custom processes
     if not sync_mode:
         cfg.add_process(
@@ -261,7 +254,6 @@ def add_config(
         cfg.add_process(proc)
 
     # configure colors, labels, etc
-    from multilepton.config.styles import stylize_processes
     stylize_processes(cfg)
 
     ################################################################################################

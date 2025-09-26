@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-Exemplary selection methods.
+HH -> multi-leptons selection methods.
 """
 
 from columnflow.categorization import Categorizer, categorizer
@@ -18,7 +18,6 @@ ak = maybe_import("awkward")
 def cat_all(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     # keep all events
     return events, ak.ones_like(events.event) == 1
-
 
 #
 # lepton channels
@@ -100,6 +99,7 @@ def cat_ce3mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, 
 def cat_c4mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
     return events, events.channel_id == self.config_inst.channels.n.ce3mu.id
 
+
 # to be implemented
 # @categorizer(uses={"channel_id"})
 # def cat_c3etau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
@@ -164,7 +164,6 @@ def cat_4l(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.
 #
 # QCD regions
 #
-
 
 @categorizer(uses={"leptons_os"})
 def cat_os(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:

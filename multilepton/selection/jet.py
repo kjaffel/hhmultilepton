@@ -3,6 +3,7 @@
 """
 Jet selection methods.
 """
+
 from __future__ import annotations
 
 from operator import or_
@@ -92,7 +93,6 @@ def jet_selection(
     # hhb-jet identification
     #
 
-    # get the hhbtag values per jet per event
     events = self[hhbtag](events, default_mask, lepton_results.x.lepton_pair, **kwargs)
     hhbtag_scores = events.hhbtag_score
 
@@ -108,7 +108,6 @@ def jet_selection(
     # matching should be done and should therefore be ignored.
 
     false_mask = full_like(events.event, False, dtype=bool)
-
     # create mask for tautau events that fired and matched tautau trigger
     tt_match_mask = (
         (events.channel_id == ch_tautau.id) &
@@ -129,7 +128,6 @@ def jet_selection(
             false_mask,
         ), axis=1)
     )
-
     # create mask for tautau events that matched taus in vbf trigger
     ttv_mask = (
         (events.channel_id == ch_tautau.id) &
@@ -160,7 +158,6 @@ def jet_selection(
             (hhbjet_mask[ttj_mask] != EMPTY_FLOAT) &
             (events.Jet.pt[ttj_mask] > 60.0)  # ! Note: hardcoded value
         )
-
         # check which jets can be matched to any of the jet legs
         matching_mask = full_like(events.Jet.pt[ttj_mask], False, dtype=bool)
         for trigger, _, leg_masks in trigger_results.x.trigger_data:
@@ -202,7 +199,6 @@ def jet_selection(
 
         # constrain to jets with a score and a minimum pt corresponding to the trigger jet leg
         matching_mask = (
-            matching_mask &
             constraints_mask_matched_hhbjet
         )
 
@@ -247,7 +243,6 @@ def jet_selection(
         # check if the pt-leading jet of the two hhbjets is matched for any tautaujet trigger
         # and fold back into hhbjet_mask
         leading_matched = ak.fill_none(ak.firsts(matching_mask[sel_hhbjet_mask][pt_sorting_indices], axis=1), False)
-
         # cast full leading matched mask to event mask
         full_leading_matched_all_events = full_like(events.event, False, dtype=bool)
         flat_full_leading_matched_all_events = flat_np_view(full_leading_matched_all_events)
@@ -342,7 +337,6 @@ def jet_selection(
         # update the "ttv only" mask
         cross_vbf_masks = [events.matched_trigger_ids == tid for tid in self.trigger_ids_ttv]
         cross_vbf_mask = ak.all(reduce(or_, cross_vbf_masks), axis=1)
-
         # remove all events that fired only vbf trigger but were not matched or
         # that fired vbf and tautaujet triggers and matched the taus but not the jets
         ttv_fired_v_not_matched = (

@@ -6,10 +6,10 @@ Test model definition.
 
 from __future__ import annotations
 
-from typing import Any
-
 import law
 import order as od
+
+from typing import Any
 
 from columnflow.ml import MLModel
 from columnflow.util import maybe_import, dev_sandbox
@@ -18,7 +18,6 @@ from columnflow.columnar_util import Route, set_ak_column
 
 np = maybe_import("numpy")
 ak = maybe_import("awkward")
-
 law.contrib.load("tensorflow")
 
 
@@ -105,7 +104,6 @@ class TestModel(MLModel):
         events = set_ak_column(events, f"{self.cls_name}.kl", 0.5, value_type=np.float32)
 
         return events
-
 
 # usable derivations
 test_model = TestModel.derive("test_model", cls_dict={"folds": 2})
