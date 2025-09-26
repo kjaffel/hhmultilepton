@@ -1604,15 +1604,16 @@ def add_config(
             # event info
             "deterministic_seed",
             # object info
-            "Jet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
-            "HHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
-            "NonHHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
-            "VBFJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btagPNet*,btagDeep*,deterministic_seed}",
+            "Jet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
+            "HHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
+            "NonHHBJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
+            "VBFJet.{pt,eta,phi,mass,hadronFlavour,puId,hhbtag,btag*,nConstituents,deterministic_seed}",
             "FatJet.*",
             "SubJet{1,2}.*",
             "Electron.*",
             "Muon.*",
             "Tau.*",
+            "GenPart*",
             f"{cfg.x.met_name}.{{pt,phi,significance,covXX,covXY,covYY}}",
             "PV.npvs",
             # keep all columns added during selection and reduction, but skip cutflow features
@@ -1701,15 +1702,15 @@ def add_config(
     cfg.add_channel(name="ee", id=4, label=r"$ee$")
     cfg.add_channel(name="mumu", id=5, label=r"$\mu\mu$")
     cfg.add_channel(name="emu", id=6, label=r"$e\mu$")
-    cfg.add_channel(name="c3e", id=7, label=r"$eee$")
-    cfg.add_channel(name="c2emu", id=8, label=r"$ee\mu$")
-    cfg.add_channel(name="ce2mu", id=9, label=r"$e\mu\mu$")
-    cfg.add_channel(name="c3mu", id=10, label=r"$\mu\mu\mu$")
-    cfg.add_channel(name="c4e", id=11, label=r"$eeee$")
-    cfg.add_channel(name="c3emu", id=12, label=r"$eee\mu$")
-    cfg.add_channel(name="c2e2mu", id=13, label=r"$ee\mu\mu$")
-    cfg.add_channel(name="ce3mu", id=14, label=r"$e\mu\mu\mu$")
-    cfg.add_channel(name="c4mu", id=15, label=r"$\mu\mu\mu\mu$")
+    cfg.add_channel(name="c3e", id=14, label=r"$eee$")
+    cfg.add_channel(name="c2emu", id=15, label=r"$ee\mu$")
+    cfg.add_channel(name="ce2mu", id=16, label=r"$e\mu\mu$")
+    cfg.add_channel(name="c3mu", id=17, label=r"$\mu\mu\mu$")
+    cfg.add_channel(name="c4e", id=18, label=r"$eeee$")
+    cfg.add_channel(name="c3emu", id=19, label=r"$eee\mu$")
+    cfg.add_channel(name="c2e2mu", id=20, label=r"$ee\mu\mu$")
+    cfg.add_channel(name="ce3mu", id=21, label=r"$e\mu\mu\mu$")
+    cfg.add_channel(name="c4mu", id=22, label=r"$\mu\mu\mu\mu$")
     # to be implemented
     # cfg.add_channel(name="c3etau", id=16, label=r"$eee\tau_{h}$")
     # cfg.add_channel(name="c2emutau", id=17, label=r"$ee\mu\tau_{h}$")
@@ -1810,5 +1811,8 @@ def add_config(
             f"local_fs_{cfg.campaign.x.custom['name']}",
             f"wlcg_fs_{cfg.campaign.x.custom['name']}",
         ]
-
+        # print(cfg.get_category("ceormu__tight_bdt__trigmatch_bdt__bveto_on"), "???????????/")
+        # print(cfg.get_category("ceormu__tight_bdt__nontrigmatch_bdt__bveto_on"), "???????????/")
+        # print(cfg.get_category("ceormu__nontight_bdt__trigmatch_bdt__bveto_on"), "???????????/")
+        # print(cfg.get_category("ceormu__nontight_bdt__nontrigmatch_bdt__bveto_on"), "???????????/")
     return cfg

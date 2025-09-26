@@ -5,6 +5,7 @@ Selection methods.
 """
 
 from __future__ import annotations
+
 from operator import and_
 from functools import reduce
 from collections import defaultdict
@@ -28,15 +29,14 @@ from columnflow.hist_util import create_hist_from_variables, fill_hist
 from columnflow.util import maybe_import, DotDict
 from columnflow.types import Iterable
 
-from multilepton.selection.trigger import trigger_selection
-from multilepton.selection.lepton import lepton_selection
-from multilepton.selection.jet import jet_selection
-from multilepton.util import IF_DATASET_HAS_LHE_WEIGHTS, IF_RUN_3
+from multilepton.selection.trigger_multilepton import trigger_selection
+from multilepton.selection.lepton_multilepton import lepton_selection
+from multilepton.selection.jet_multilepton import jet_selection
+import multilepton.production.processes as process_producers
 from multilepton.production.btag import btag_weights_deepjet, btag_weights_pnet
 from multilepton.production.features import cutflow_features
 from multilepton.production.patches import patch_ecalBadCalibFilter
-
-import multilepton.production.processes as process_producers
+from multilepton.util import IF_DATASET_HAS_LHE_WEIGHTS, IF_RUN_3
 
 np = maybe_import("numpy")
 ak = maybe_import("awkward")
@@ -335,8 +335,10 @@ def empty_call(
 
     # ensure coffea behavior
     events = self[attach_coffea_behavior](events, **kwargs)
+
     # prepare the selection results that are updated at every step
     results = SelectionResult()
+
     # before performing selection steps, drop events that should not be considered at all and
     # maintain a mask "no_sel" that refers to events that are kept
     bad_mask = get_bad_events(self, events)
@@ -346,16 +348,21 @@ def empty_call(
     # mc-only functions
     if self.dataset_inst.is_mc:
         events = self[mc_weight](events, **kwargs)
+
         # pdf weights
         if self.has_dep(pdf_weights):
             events = self[pdf_weights](events, **kwargs)
+
         # renormalization/factorization scale weights
         if self.has_dep(murmuf_weights):
             events = self[murmuf_weights](events, **kwargs)
+
         # parton shower weights
         events = self[ps_weights](events, invalid_weights_action="ignore_one", **kwargs)
+
         # pileup weights
         events = self[pu_weight](events, **kwargs)
+
         # btag weights
         btag_weight_jet_mask = abs(events.Jet["eta"]) < 2.5
         events = self[btag_weights_deepjet](
@@ -386,10 +393,17 @@ def empty_call(
     events = set_ak_column(events, "tau2_isolated", np.zeros(len(events), dtype=bool))
     events = set_ak_column(events, "cross_triggered", np.zeros(len(events), dtype=bool))
     events = set_ak_column(events, "single_triggered", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "tight_sel", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "trig_match", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "tight_sel_bdt", np.zeros(len(events), dtype=bool))
+    events = set_ak_column(events, "trig_match_bdt", np.zeros(len(events), dtype=bool))
+
     # store number of jets for stats and histograms
     events = set_ak_column(events, "n_jets_stats", ak.num(events.Jet, axis=1), value_type=np.int32)
+
     # trivial selection mask capturing all events
     results.event = np.ones(len(events), dtype=bool)
+
     # increment stats
     events, results = increment_stats(
         self,
@@ -405,6 +419,7 @@ def empty_call(
             "nob_pnet": results.event if self.has_dep(btag_weights_pnet) else None,
         },
     )
+
     return events, results
 
 

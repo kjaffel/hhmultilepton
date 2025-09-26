@@ -346,8 +346,7 @@ def add_variables(config: od.Config) -> None:
         x_title=r"$\Delta R_{bb}$",
     )
 
-    def build_nbjets(events, which=None):
-        wp = "medium"
+    def build_nbjets(events, which=None, wp="medium"):
         if which == "btagPNetB":
             wp_value = config.x.btag_working_points["particleNet"][wp]
         elif which == "btagDeepFlavB":
@@ -363,7 +362,7 @@ def add_variables(config: od.Config) -> None:
 
     add_variable(
         config,
-        name="nbjets_deepjet",
+        name="nbjets_deepjet_medium",
         expression=partial(build_nbjets, which="btagDeepFlavB"),
         aux={"inputs": build_nbjets.inputs},
         binning=(11, -0.5, 10.5),
@@ -372,11 +371,30 @@ def add_variables(config: od.Config) -> None:
     )
     add_variable(
         config,
-        name="nbjets_pnet",
+        name="nbjets_pnet_medium",
         expression=partial(build_nbjets, which="btagPNetB"),
         aux={"inputs": build_nbjets.inputs},
         binning=(11, -0.5, 10.5),
         x_title=r"Number of b-jets (PNet medium)",
+        discrete_x=True,
+    )
+
+    add_variable(
+        config,
+        name="nbjets_deepjet_loose",
+        expression=partial(build_nbjets, which="btagDeepFlavB", wp="loose"),
+        aux={"inputs": build_nbjets.inputs},
+        binning=(11, -0.5, 10.5),
+        x_title=r"Number of b-jets (DeepJet loose)",
+        discrete_x=True,
+    )
+    add_variable(
+        config,
+        name="nbjets_pnet_loose",
+        expression=partial(build_nbjets, which="btagPNetB", wp="loose"),
+        aux={"inputs": build_nbjets.inputs},
+        binning=(11, -0.5, 10.5),
+        x_title=r"Number of b-jets (PNet loose)",
         discrete_x=True,
     )
 
