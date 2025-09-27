@@ -106,7 +106,7 @@ def electron_selection(
     See https://twiki.cern.ch/twiki/bin/view/CMS/EgammaNanoAOD?rev=4
     """
     ch_key = kwargs.get("ch_key", None)
-    is_2016 = self.config_inst.campaign.x.year == 2016
+    # is_2016 = self.config_inst.campaign.x.year == 2016
     is_2022_post = (
         self.config_inst.campaign.x.year == 2022 and
         self.config_inst.campaign.has_tag("postEE")
@@ -168,7 +168,7 @@ def electron_selection(
         )
         loose_mask = (
             (events.Electron.pt > 7.0) &
-            (abs(events.Electron.eta) < max_eta) &
+            (abs(events.Electron.eta) < 3.0) &
             (abs(events.Electron.dxy) < 0.05) &
             (abs(events.Electron.dz) < 0.1) &
             (events.Electron.sip3d < 8) &
@@ -212,7 +212,7 @@ def electron_selection(
         if ch_key == "eormu":
             fakeable_mask = loose_mask
 
-    veto_mask = loose_mask
+    veto_mask = loose_mask & (abs(events.Electron.eta) < max_eta)
     # analysis_mask = tight_mask & (events.Electron.pt > min_pt)
     control_mask = fakeable_mask
 
@@ -283,7 +283,7 @@ def muon_selection(
     relaxed for multilepton, to be replaced with lepMVA later on
     """
     ch_key = kwargs.get("ch_key", None)
-    is_2016 = self.config_inst.campaign.x.year == 2016
+    # is_2016 = self.config_inst.campaign.x.year == 2016
     # is_single = trigger.has_tag("single_mu")
     is_single = trigger.has_tag("single_mu") or trigger.has_tag("single_e")
     is_cross = trigger.has_tag("cross_mu_tau")
@@ -327,7 +327,7 @@ def muon_selection(
         )
         loose_mask = (
             (events.Muon.pt > 5) &
-            (abs(events.Muon.eta) < 2.4) &
+            (abs(events.Muon.eta) < 3.0) &
             (abs(events.Muon.dxy) < 0.05) &
             (abs(events.Muon.dz) < 0.1) &
             (events.Muon.sip3d < 8) &
@@ -350,7 +350,7 @@ def muon_selection(
         if ch_key == "eormu":
             fakeable_mask = loose_mask
 
-        veto_mask = loose_mask
+        veto_mask = loose_mask & (abs(events.Muon.eta) < 2.4)
         # analysis_mask = tight_mask & (events.Muon.pt > min_pt)
         control_mask = fakeable_mask
     return tight_mask, control_mask, veto_mask
@@ -684,7 +684,7 @@ def lepton_selection(
     # for this, combine iso and pt values, e.g. iso 255 and pt 32.3 -> 2550032.3
     f = 10**(np.ceil(np.log10(ak.max(events.Tau.pt))) + 2)
     tau_sorting_key = events.Tau[f"raw{self.config_inst.x.tau_tagger}VSjet"] * f + events.Tau.pt
-    tau_sorting_indices = ak.argsort(tau_sorting_key, axis=-1, ascending=False)
+    # tau_sorting_indices = ak.argsort(tau_sorting_key, axis=-1, ascending=False)
 
     # perform each lepton election step separately per trigger, avoid caching
     # sel_kwargs = {**kwargs, "call_force": True}
@@ -700,7 +700,7 @@ def lepton_selection(
     e_trig_any = full_like(events.event, False, dtype=bool)  # we OR all fired flags for single_e here
     mu_trig_any = full_like(events.event, False, dtype=bool)  # we OR all fired flags for single_mu here
     e_match_any = full_like(events.Electron.pt, False, dtype=bool)
-    mu_match_any = full_like(events.Muon.pt, False, dtype=bool)
+    # mu_match_any = full_like(events.Muon.pt, False, dtype=bool)
     e_ctrl_single = None
     e_mask_single = None
     e_veto_single = None
@@ -854,12 +854,12 @@ def lepton_selection(
                 e_base = (
                     (ak.sum(e_ctrl_bdt, axis=1) >= 1) &
                     (ak.sum(e_veto_bdt, axis=1) >= 0) &
-                    (ak.sum(ch_tau_mask, axis=1) == 0)
+                    (ak.sum(ch_tau_mask, axis=1) >= 0)
                 )
                 mu_base = (
                     (ak.sum(mu_ctrl_bdt, axis=1) >= 1) &
                     (ak.sum(mu_veto_bdt, axis=1) >= 0) &
-                    (ak.sum(ch_tau_mask, axis=1) == 0)
+                    (ak.sum(ch_tau_mask, axis=1) >= 0)
                 )
 
                 base_ok = e_base | mu_base
