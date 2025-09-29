@@ -46,7 +46,7 @@ export CF_CRAB_BASE_DIRECTORY="/store/user/$CF_CERN_USER/cf_crab_outputs"
 export CF_SOFTWARE_BASE="/eos/user/$CF_CERN_USER_FIRSTCHAR/$CF_CERN_USER/HHMultilepton_Run3/software"
 
 # suggestion for manivald is the same except:
-
+export CF_JOB_BASE="/local/$CF_CERN_USER/HHMultilepton_Run3/jobs"
 export CF_WLCG_CACHE_ROOT="/local/$CF_CERN_USER/HHMultilepton_Run3/cf_scratch"
 
 # After first time setup, *if on manivald the estonian login node*, open the created setup file and add:
