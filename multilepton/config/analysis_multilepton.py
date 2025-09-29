@@ -204,3 +204,40 @@ add_lazy_config(
     add_limited=False,
     sync_mode=True,
 )
+
+#
+# non private Nano configs
+# 
+
+
+# 2022, preEE v12
+add_lazy_config(
+    campaign_module="cmsdb.campaigns.run3_2022_preEE_nano_v12",
+    campaign_attr="campaign_run3_2022_preEE_nano_v12",
+    config_name="22pre_v12_central",
+    config_id=5012,
+)
+
+# 2022, postEE v12
+add_lazy_config(
+    campaign_module="cmsdb.campaigns.run3_2022_postEE_nano_v12",
+    campaign_attr="campaign_run3_2022_postEE_nano_v12",
+    config_name="22post_v12_central",
+    config_id=6012,
+)
+
+# 2023, preBPix v12
+add_lazy_config(
+    campaign_module="cmsdb.campaigns.run3_2023_preBPix_nano_v12",
+    campaign_attr="campaign_run3_2023_preBPix_nano_v12",
+    config_name="23pre_v12_central",
+    config_id=7012,
+)
+
+# 2023, postBPix v12
+add_lazy_config(
+    campaign_module="cmsdb.campaigns.run3_2023_postBPix_nano_v12",
+    campaign_attr="campaign_run3_2023_postBPix_nano_v12",
+    config_name="23post_v12",
+    config_id=8012,
+)

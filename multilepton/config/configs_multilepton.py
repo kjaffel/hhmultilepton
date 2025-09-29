@@ -101,6 +101,12 @@ def add_config(
     def if_not_era(*, values: list[str | None] | None = None, **kwargs) -> list[str]:
         return list(filter(bool, values or [])) if not _match_era(**kwargs) else []
 
+    def if_in_config_id(ids, values):
+        return list(filter(bool, values or [])) if cfg.id in ids else []
+
+    def if_not_in_config_id(ids, values):
+        return list(filter(bool, values or [])) if not cfg.id in ids else []
+
     ################################################################################################
     # processes
     ################################################################################################
@@ -111,13 +117,13 @@ def add_config(
             name="v",
             id=7997,
             label="W/Z",
-            processes=[procs.n.w, procs.n.z],
+            processes=[] if cfg.id in [5012, 6012, 7012, 8012] else [procs.n.w, procs.n.z],
         )
         cfg.add_process(
             name="multiboson",
             id=7998,
             label="Multiboson",
-            processes=[procs.n.vv, procs.n.vvv],
+            processes=[] if cfg.id in [5012, 6012, 7012, 8012] else [procs.n.vv, procs.n.vvv],
         )
         cfg.add_process(
             name="all_v",
@@ -131,6 +137,41 @@ def add_config(
             label=r"$t\bar{t}$ + Multiboson",
             processes=[procs.n.ttv, procs.n.ttvv],
         )
+        # manisha QCD
+        if cfg.id in [5012, 6012, 7012, 8012]:
+            cfg.add_process(
+                name="qcd_mc_em_pythia",
+                id=8000,
+                label=r"QCD $e$ enriched",
+                processes=[
+                    procs.n.qcd_em_pt10to30,
+                    procs.n.qcd_em_pt30to50,
+                    procs.n.qcd_em_pt50to80,
+                    procs.n.qcd_em_pt80to120,
+                    procs.n.qcd_em_pt120to170,
+                    procs.n.qcd_em_pt170to300,
+                    procs.n.qcd_em_pt300toinf,
+                    ],
+            )
+            cfg.add_process(
+                name="qcd_mc_e_pythia",
+                id=8001,
+                label=r"QCD $\mu$ enriched",
+                processes=[
+                    procs.n.qcd_mu_pt15to20,
+                    procs.n.qcd_mu_pt20to30,
+                    procs.n.qcd_mu_pt30to50,
+                    procs.n.qcd_mu_pt50to80,
+                    procs.n.qcd_mu_pt80to120,
+                    procs.n.qcd_mu_pt120to170,
+                    procs.n.qcd_mu_pt170to300,
+                    procs.n.qcd_mu_pt300to470,
+                    procs.n.qcd_mu_pt470to600,
+                    procs.n.qcd_mu_pt600to800,
+                    procs.n.qcd_mu_pt800to1000,
+                    procs.n.qcd_mu_pt1000toinf,
+                    ],
+            )
 
     # processes we are interested in
     process_names = [
@@ -270,85 +311,86 @@ def add_config(
 
     # add datasets we need to study
     dataset_names = [
-        # hh ggf
-        "hh_ggf_hbb_htt_kl1_kt1_powheg",
-        "hh_ggf_hbb_htt_kl0_kt1_powheg",
-        "hh_ggf_hbb_htt_kl2p45_kt1_powheg",
-        "hh_ggf_hbb_htt_kl5_kt1_powheg",
-        # hh 2V2t (2p45 missing)
-        "hh_ggf_htt_hvv_kl1_kt1_powheg",
-        "hh_ggf_htt_hvv_kl0_kt1_powheg",
-        "hh_ggf_htt_hvv_kl5_kt1_powheg",
-        # hh 4t (2p45 missing)
-        "hh_ggf_htt_htt_kl1_kt1_powheg",
-        "hh_ggf_htt_htt_kl0_kt1_powheg",
-        "hh_ggf_htt_htt_kl5_kt1_powheg",
-        # hh 4V (2p45 missing)
-        "hh_ggf_hvv_hvv_kl1_kt1_powheg",
-        "hh_ggf_hvv_hvv_kl0_kt1_powheg",
-        "hh_ggf_hvv_hvv_kl5_kt1_powheg",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            # hh ggf
+            "hh_ggf_hbb_htt_kl1_kt1_powheg",
+            "hh_ggf_hbb_htt_kl0_kt1_powheg",
+            "hh_ggf_hbb_htt_kl2p45_kt1_powheg",
+            "hh_ggf_hbb_htt_kl5_kt1_powheg",
+            # hh 2V2t (2p45 missing)
+            "hh_ggf_htt_hvv_kl1_kt1_powheg",
+            "hh_ggf_htt_hvv_kl0_kt1_powheg",
+            "hh_ggf_htt_hvv_kl5_kt1_powheg",
+            # hh 4t (2p45 missing)
+            "hh_ggf_htt_htt_kl1_kt1_powheg",
+            "hh_ggf_htt_htt_kl0_kt1_powheg",
+            "hh_ggf_htt_htt_kl5_kt1_powheg",
+            # hh 4V (2p45 missing)
+            "hh_ggf_hvv_hvv_kl1_kt1_powheg",
+            "hh_ggf_hvv_hvv_kl0_kt1_powheg",
+            "hh_ggf_hvv_hvv_kl5_kt1_powheg",
 
-        # hh vbf
-        "hh_vbf_hbb_htt_kv1_k2v1_kl1_madgraph",
-        "hh_vbf_hbb_htt_kv1_k2v0_kl1_madgraph",
-        *if_era(year=2022, values=[
-            "hh_vbf_hbb_htt_kv1_k2v1_kl2_madgraph",  # Poisson60KeepRAW for 2022post
-            "hh_vbf_hbb_htt_kv1_k2v2_kl1_madgraph",  # Poisson60KeepRAW for 2022post
+            # hh vbf
+            "hh_vbf_hbb_htt_kv1_k2v1_kl1_madgraph",
+            "hh_vbf_hbb_htt_kv1_k2v0_kl1_madgraph",
+            *if_era(year=2022, values=[
+                "hh_vbf_hbb_htt_kv1_k2v1_kl2_madgraph",  # Poisson60KeepRAW for 2022post
+                "hh_vbf_hbb_htt_kv1_k2v2_kl1_madgraph",  # Poisson60KeepRAW for 2022post
+            ]),
+            "hh_vbf_hbb_htt_kv1p74_k2v1p37_kl14p4_madgraph",
+            "hh_vbf_hbb_htt_kvm0p012_k2v0p03_kl10p2_madgraph",
+            "hh_vbf_hbb_htt_kvm0p758_k2v1p44_klm19p3_madgraph",
+            "hh_vbf_hbb_htt_kvm0p962_k2v0p959_klm1p43_madgraph",
+            "hh_vbf_hbb_htt_kvm1p21_k2v1p94_klm0p94_madgraph",
+            "hh_vbf_hbb_htt_kvm1p6_k2v2p72_klm1p36_madgraph",
+            "hh_vbf_hbb_htt_kvm1p83_k2v3p57_klm3p39_madgraph",
+            "hh_vbf_hbb_htt_kvm2p12_k2v3p87_klm5p96_madgraph",
+
+            "hh_vbf_htt_hvv_kv1_k2v1_kl1_madgraph",
+            "hh_vbf_htt_hvv_kv1_k2v0_kl1_madgraph",
+            "hh_vbf_htt_hvv_kv1p74_k2v1p37_kl14p4_madgraph",
+            *if_era(year=2022, values=[
+                "hh_vbf_htt_hvv_kvm0p012_k2v0p03_kl10p2_madgraph",
+            ]),
+            "hh_vbf_htt_hvv_kvm0p758_k2v1p44_klm19p3_madgraph",
+            "hh_vbf_htt_hvv_kvm0p962_k2v0p959_klm1p43_madgraph",
+            "hh_vbf_htt_hvv_kvm1p21_k2v1p94_klm0p94_madgraph",
+            "hh_vbf_htt_hvv_kvm1p6_k2v2p72_klm1p36_madgraph",
+            "hh_vbf_htt_hvv_kvm1p83_k2v3p57_klm3p39_madgraph",
+            "hh_vbf_htt_hvv_kvm2p12_k2v3p87_klm5p96_madgraph",
+
+            "hh_vbf_htt_htt_kv1_k2v1_kl1_madgraph",
+            "hh_vbf_htt_htt_kv1_k2v0_kl1_madgraph",
+            "hh_vbf_htt_htt_kv1p74_k2v1p37_kl14p4_madgraph",
+            "hh_vbf_htt_htt_kvm0p012_k2v0p03_kl10p2_madgraph",
+            "hh_vbf_htt_htt_kvm0p758_k2v1p44_klm19p3_madgraph",
+            "hh_vbf_htt_htt_kvm0p962_k2v0p959_klm1p43_madgraph",
+            "hh_vbf_htt_htt_kvm1p21_k2v1p94_klm0p94_madgraph",
+            "hh_vbf_htt_htt_kvm1p6_k2v2p72_klm1p36_madgraph",
+            "hh_vbf_htt_htt_kvm1p83_k2v3p57_klm3p39_madgraph",
+            "hh_vbf_htt_htt_kvm2p12_k2v3p87_klm5p96_madgraph",
+
+            "hh_vbf_hvv_hvv_kv1_k2v1_kl1_madgraph",
+            "hh_vbf_hvv_hvv_kv1_k2v0_kl1_madgraph",
+            "hh_vbf_hvv_hvv_kv1p74_k2v1p37_kl14p4_madgraph",
+            *if_era(year=2022, values=[
+                "hh_vbf_hvv_hvv_kvm0p012_k2v0p03_kl10p2_madgraph",
+            ]),
+            "hh_vbf_hvv_hvv_kvm0p758_k2v1p44_klm19p3_madgraph",
+            "hh_vbf_hvv_hvv_kvm0p962_k2v0p959_klm1p43_madgraph",
+            "hh_vbf_hvv_hvv_kvm1p21_k2v1p94_klm0p94_madgraph",
+            "hh_vbf_hvv_hvv_kvm1p6_k2v2p72_klm1p36_madgraph",
+            "hh_vbf_hvv_hvv_kvm1p83_k2v3p57_klm3p39_madgraph",
+            "hh_vbf_hvv_hvv_kvm2p12_k2v3p87_klm5p96_madgraph",
+
+            # x -> hh resonances
+            *if_era(year=2022, values=[
+                "radion_hh_ggf_hbb_htt_m450_madgraph",
+                "radion_hh_ggf_hbb_htt_m1200_madgraph",
+                "graviton_hh_ggf_hbb_htt_m450_madgraph",
+                "graviton_hh_ggf_hbb_htt_m1200_madgraph",
+            ]),
         ]),
-        "hh_vbf_hbb_htt_kv1p74_k2v1p37_kl14p4_madgraph",
-        "hh_vbf_hbb_htt_kvm0p012_k2v0p03_kl10p2_madgraph",
-        "hh_vbf_hbb_htt_kvm0p758_k2v1p44_klm19p3_madgraph",
-        "hh_vbf_hbb_htt_kvm0p962_k2v0p959_klm1p43_madgraph",
-        "hh_vbf_hbb_htt_kvm1p21_k2v1p94_klm0p94_madgraph",
-        "hh_vbf_hbb_htt_kvm1p6_k2v2p72_klm1p36_madgraph",
-        "hh_vbf_hbb_htt_kvm1p83_k2v3p57_klm3p39_madgraph",
-        "hh_vbf_hbb_htt_kvm2p12_k2v3p87_klm5p96_madgraph",
-
-        "hh_vbf_htt_hvv_kv1_k2v1_kl1_madgraph",
-        "hh_vbf_htt_hvv_kv1_k2v0_kl1_madgraph",
-        "hh_vbf_htt_hvv_kv1p74_k2v1p37_kl14p4_madgraph",
-        *if_era(year=2022, values=[
-            "hh_vbf_htt_hvv_kvm0p012_k2v0p03_kl10p2_madgraph",
-        ]),
-        "hh_vbf_htt_hvv_kvm0p758_k2v1p44_klm19p3_madgraph",
-        "hh_vbf_htt_hvv_kvm0p962_k2v0p959_klm1p43_madgraph",
-        "hh_vbf_htt_hvv_kvm1p21_k2v1p94_klm0p94_madgraph",
-        "hh_vbf_htt_hvv_kvm1p6_k2v2p72_klm1p36_madgraph",
-        "hh_vbf_htt_hvv_kvm1p83_k2v3p57_klm3p39_madgraph",
-        "hh_vbf_htt_hvv_kvm2p12_k2v3p87_klm5p96_madgraph",
-
-        "hh_vbf_htt_htt_kv1_k2v1_kl1_madgraph",
-        "hh_vbf_htt_htt_kv1_k2v0_kl1_madgraph",
-        "hh_vbf_htt_htt_kv1p74_k2v1p37_kl14p4_madgraph",
-        "hh_vbf_htt_htt_kvm0p012_k2v0p03_kl10p2_madgraph",
-        "hh_vbf_htt_htt_kvm0p758_k2v1p44_klm19p3_madgraph",
-        "hh_vbf_htt_htt_kvm0p962_k2v0p959_klm1p43_madgraph",
-        "hh_vbf_htt_htt_kvm1p21_k2v1p94_klm0p94_madgraph",
-        "hh_vbf_htt_htt_kvm1p6_k2v2p72_klm1p36_madgraph",
-        "hh_vbf_htt_htt_kvm1p83_k2v3p57_klm3p39_madgraph",
-        "hh_vbf_htt_htt_kvm2p12_k2v3p87_klm5p96_madgraph",
-
-        "hh_vbf_hvv_hvv_kv1_k2v1_kl1_madgraph",
-        "hh_vbf_hvv_hvv_kv1_k2v0_kl1_madgraph",
-        "hh_vbf_hvv_hvv_kv1p74_k2v1p37_kl14p4_madgraph",
-        *if_era(year=2022, values=[
-            "hh_vbf_hvv_hvv_kvm0p012_k2v0p03_kl10p2_madgraph",
-        ]),
-        "hh_vbf_hvv_hvv_kvm0p758_k2v1p44_klm19p3_madgraph",
-        "hh_vbf_hvv_hvv_kvm0p962_k2v0p959_klm1p43_madgraph",
-        "hh_vbf_hvv_hvv_kvm1p21_k2v1p94_klm0p94_madgraph",
-        "hh_vbf_hvv_hvv_kvm1p6_k2v2p72_klm1p36_madgraph",
-        "hh_vbf_hvv_hvv_kvm1p83_k2v3p57_klm3p39_madgraph",
-        "hh_vbf_hvv_hvv_kvm2p12_k2v3p87_klm5p96_madgraph",
-
-        # x -> hh resonances
-        *if_era(year=2022, values=[
-            "radion_hh_ggf_hbb_htt_m450_madgraph",
-            "radion_hh_ggf_hbb_htt_m1200_madgraph",
-            "graviton_hh_ggf_hbb_htt_m450_madgraph",
-            "graviton_hh_ggf_hbb_htt_m1200_madgraph",
-        ]),
-
         # ttbar
         "tt_sl_powheg",
         "tt_dl_powheg",
@@ -363,14 +405,18 @@ def add_config(
         "st_twchannel_tbar_dl_powheg",
         "st_twchannel_t_fh_powheg",
         "st_twchannel_tbar_fh_powheg",
-        "st_schannel_t_lep_4f_amcatnlo",
-        "st_schannel_tbar_lep_4f_amcatnlo",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "st_schannel_t_lep_4f_amcatnlo",
+            "st_schannel_tbar_lep_4f_amcatnlo",
+        ]),
 
         # tt + v
-        "ttw_wlnu_amcatnlo",
-        "ttz_zqq_amcatnlo",
-        "ttz_zll_m4to50_amcatnlo",
-        "ttz_zll_m50toinf_amcatnlo",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "ttw_wlnu_amcatnlo",
+            "ttz_zqq_amcatnlo",
+            "ttz_zll_m4to50_amcatnlo",
+            "ttz_zll_m50toinf_amcatnlo",
+        ]),
 
         # tt + vv
         "ttww_madgraph",
@@ -399,19 +445,21 @@ def add_config(
 
         # w + jets
         "w_lnu_amcatnlo",
-        "w_lnu_0j_amcatnlo",
-        "w_lnu_1j_amcatnlo",
-        "w_lnu_2j_amcatnlo",
-        "w_lnu_1j_pt40to100_amcatnlo",
-        "w_lnu_1j_pt100to200_amcatnlo",
-        "w_lnu_1j_pt200to400_amcatnlo",
-        "w_lnu_1j_pt400to600_amcatnlo",
-        "w_lnu_1j_pt600toinf_amcatnlo",
-        "w_lnu_2j_pt40to100_amcatnlo",
-        "w_lnu_2j_pt100to200_amcatnlo",
-        "w_lnu_2j_pt200to400_amcatnlo",
-        "w_lnu_2j_pt400to600_amcatnlo",
-        "w_lnu_2j_pt600toinf_amcatnlo",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "w_lnu_0j_amcatnlo",
+            "w_lnu_1j_amcatnlo",
+            "w_lnu_2j_amcatnlo",
+            "w_lnu_1j_pt40to100_amcatnlo",
+            "w_lnu_1j_pt100to200_amcatnlo",
+            "w_lnu_1j_pt200to400_amcatnlo",
+            "w_lnu_1j_pt400to600_amcatnlo",
+            "w_lnu_1j_pt600toinf_amcatnlo",
+            "w_lnu_2j_pt40to100_amcatnlo",
+            "w_lnu_2j_pt100to200_amcatnlo",
+            "w_lnu_2j_pt200to400_amcatnlo",
+            "w_lnu_2j_pt400to600_amcatnlo",
+            "w_lnu_2j_pt600toinf_amcatnlo",
+        ]),
 
         # z + jets (not DY but qq)
         # decided to drop z_qq for now as their contribution is negligible,
@@ -426,18 +474,22 @@ def add_config(
         # "z_qq_2j_pt600toinf_amcatnlo",
 
         # vbf w/z production
-        "w_vbf_wlnu_madgraph",
-        "z_vbf_zll_m50toinf_madgraph",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "w_vbf_wlnu_madgraph",
+            "z_vbf_zll_m50toinf_madgraph",
+        ]),
         # vv
         "zz_pythia",
         "wz_pythia",
         "ww_pythia",
 
         # vvv
-        "www_4f_amcatnlo",
-        "wwz_4f_amcatnlo",
-        "wzz_amcatnlo",
-        "zzz_amcatnlo",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "www_4f_amcatnlo",
+            "wwz_4f_amcatnlo",
+            "wzz_amcatnlo",
+            "zzz_amcatnlo",
+        ]),
 
         # single H
         "h_ggf_htt_powheg",
@@ -447,7 +499,9 @@ def add_config(
         "wmh_wlnu_hbb_powheg",
         "wph_wlnu_hbb_powheg",
         "wph_htt_powheg",
-        "wmh_htt_powheg",
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "wmh_htt_powheg",
+        ]),
         "wph_wqq_hbb_powheg",
         "wmh_wqq_hbb_powheg",
         "zh_zll_hbb_powheg",
@@ -459,18 +513,43 @@ def add_config(
         "tth_hbb_powheg",
         "tth_hnonbb_powheg",
 
+        # QCD manisha
+        *if_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            "qcd_mu_pt15to20_pythia",
+            "qcd_mu_pt20to30_pythia",
+            "qcd_mu_pt30to50_pythia",
+            "qcd_mu_pt50to80_pythia",
+            "qcd_mu_pt80to120_pythia",
+            "qcd_mu_pt120to170_pythia",
+            "qcd_mu_pt170to300_pythia",
+            "qcd_mu_pt300to470_pythia",
+            "qcd_mu_pt470to600_pythia",
+            "qcd_mu_pt600to800_pythia",
+            "qcd_mu_pt800to1000_pythia",
+            "qcd_mu_pt1000toinf_pythia",
+            "qcd_em_pt10to30_pythia",
+            "qcd_em_pt30to50_pythia",
+            "qcd_em_pt50to80_pythia",
+            "qcd_em_pt80to120_pythia",
+            "qcd_em_pt120to170_pythia",
+            "qcd_em_pt170to300_pythia",
+            "qcd_em_pt300toinf_pythia",
+        ]),
+
         # data
-        *if_era(year=2022, tag="preEE", values=[
-            f"data_{stream}_{period}" for stream in ["e", "mu", "tau"] for period in "cd"
-        ]),
-        *if_era(year=2022, tag="postEE", values=[
-            f"data_{stream}_{period}" for stream in ["e", "mu", "tau"] for period in "efg"
-        ]),
-        *if_era(year=2023, tag="preBPix", values=[
-            f"data_{stream}_c{v}" for stream in ["e", "mu", "tau"] for v in "1234"
-        ]),
-        *if_era(year=2023, tag="postBPix", values=[
-            f"data_{stream}_d{v}" for stream in ["e", "mu", "tau"] for v in "12"
+        *if_not_in_config_id(ids=[5012, 6012, 7012, 8012], values=[
+            *if_era(year=2022, tag="preEE", values=[
+                f"data_{stream}_{period}" for stream in ["e", "mu", "tau"] for period in "cd"
+            ]),
+            *if_era(year=2022, tag="postEE", values=[
+                f"data_{stream}_{period}" for stream in ["e", "mu", "tau"] for period in "efg"
+            ]),
+            *if_era(year=2023, tag="preBPix", values=[
+                f"data_{stream}_c{v}" for stream in ["e", "mu", "tau"] for v in "1234"
+            ]),
+            *if_era(year=2023, tag="postBPix", values=[
+                f"data_{stream}_d{v}" for stream in ["e", "mu", "tau"] for v in "12"
+            ]),
         ]),
     ]
     for dataset_name in dataset_names:
