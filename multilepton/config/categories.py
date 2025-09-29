@@ -19,7 +19,7 @@ def add_categories(config: od.Config) -> None:
     # root category (-1 has special meaning in cutflow)
     root_cat = add_category(config, name="all", id=-1, selection="cat_all", label="")
     _add_category = functools.partial(add_category, parent=root_cat)
-
+    
     # lepton channels
     _add_category(config, name="etau", id=1, selection="cat_etau", label=config.channels.n.etau.label)
     _add_category(config, name="mutau", id=2, selection="cat_mutau", label=config.channels.n.mutau.label)
@@ -27,6 +27,7 @@ def add_categories(config: od.Config) -> None:
     _add_category(config, name="ee", id=4, selection="cat_ee", label=config.channels.n.ee.label)
     _add_category(config, name="mumu", id=5, selection="cat_mumu", label=config.channels.n.mumu.label)
     _add_category(config, name="emu", id=6, selection="cat_emu", label=config.channels.n.emu.label)
+    
     # new multilepton channels
     _add_category(config, name="c3e", id=14, selection="cat_c3e", label=config.channels.n.c3e.label)
     _add_category(config, name="c2emu", id=15, selection="cat_c2emu", label=config.channels.n.c2emu.label)
@@ -37,6 +38,7 @@ def add_categories(config: od.Config) -> None:
     _add_category(config, name="c2e2mu", id=20, selection="cat_c2e2mu", label=config.channels.n.c2e2mu.label)
     _add_category(config, name="ce3mu", id=21, selection="cat_ce3mu", label=config.channels.n.ce3mu.label)
     _add_category(config, name="c4mu", id=22, selection="cat_c4mu", label=config.channels.n.c4mu.label)
+    
     # to be implemented
     # _add_category(config, name="c3etau", id=16, selection="cat_c3etau", label=config.channels.n.c3etau.label)
     # _add_category(config, name="c2emutau", id=17, selection="cat_c2emutau", label=config.channels.n.c2emutau.label)
@@ -48,7 +50,7 @@ def add_categories(config: od.Config) -> None:
     # _add_category(config, name="ce3tau", id=23, selection="cat_ce3tau", label=config.channels.n.ce3tau.label)
     # _add_category(config, name="cmu3tau", id=24, selection="cat_cmu3tau", label=config.channels.n.cmu3tau.label)
     # _add_category(config, name="c4tau", id=25, selection="cat_c4tau", label=config.channels.n.c4tau.label)
-
+    
     # bveto
     _add_category(config, name="bveto_on", id=30001, selection="cat_bveto_on", label="bveto on")
     _add_category(config, name="bveto_off", id=30002, selection="cat_bveto_off", label="bveto off")
@@ -195,7 +197,7 @@ def add_categories(config: od.Config) -> None:
         kwargs_fn=functools.partial(kwargs_fn, add_qcd_group=True),
     )
 
-# ##############################################################################
+    # ##############################################################################
     # Creating category combinations
     categories_sig_sideband = {
         "channel": CategoryGroup(
@@ -229,8 +231,8 @@ def add_categories(config: od.Config) -> None:
         name_fn=name_fn,
         kwargs_fn=functools.partial(kwargs_fn, add_qcd_group=False),
     )
-# #############################################################################
-
+    
+    # #############################################################################
     # control categories
     control_categories = {
         # channels first
