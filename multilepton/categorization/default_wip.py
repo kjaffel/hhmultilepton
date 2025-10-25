@@ -6,131 +6,72 @@ HH -> multi-leptons selection methods.
 
 from columnflow.categorization import Categorizer, categorizer
 from columnflow.util import maybe_import
+import inspect
 
 ak = maybe_import("awkward")
+
+MultiLeptonsChannels = [
+    "etau", "mutau", "tautau", "ee", "mumu", "emu",
+    "3e", "2emu", "e2mu", "3mu", "4e", "3emu", "2e2mu", "e3mu", "4mu",
+    "3etau", "2emutau", "e2mutau", "3mutau",
+    "2e2tau", "emu2tau", "2mu2tau", "e3tau", "mu3tau", "4tau",
+    "2ess", "emuss", "2muss"
+]
+# exceptions to the "c{name}" rule (if any don't follow the convention)
+CHANNEL_EXCEPTIONS = {
+    # Example: "mutau" : "cmutau_alt"
+}
 
 
 @categorizer(uses={"event"})
 def cat_all(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    # keep all events
-    return events, ak.ones_like(events.event) == 1
+    """Keep all events."""
+    return events, ak.ones_like(events.event, dtype=bool)
 
-#
-# di-lepton channels
-#
-@categorizer(uses={"channel_id"})
-def cat_etau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cetau.id
+def _make_channel_categorizer(name: str, channel_key: str):
+    @categorizer(uses={"channel_id"})
+    def func(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
+        if not hasattr(self.config_inst, "channels") or not hasattr(self.config_inst.channels.n, channel_key):
+            # fallback: mark all as False until config is ready
+            return events, ak.zeros_like(events.channel_id, dtype=bool)
+        return events, events.channel_id == getattr(self.config_inst.channels.n, channel_key).id
 
-@categorizer(uses={"channel_id"})
-def cat_mutau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cmutau.id
+    func.__name__ = f"cat_{name}"
+    func.__qualname__ = f"cat_{name}"
+    func.__doc__ = f"Select events belonging to the {name} channel."
+    return func
 
-@categorizer(uses={"channel_id"})
-def cat_tautau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.ctautau.id
+def _register_channel_categorizers():
+    """Scan config_inst.channels.n and generate all matching categorizer functions."""
+    # Loop over attributes in channels.n
+    for attr in dir(Categorizer.config_inst.channels.n):  # type: ignore
+        if attr.startswith("c"):  # only consider channel-like entries
+            name = attr[1:]  # e.g. cetau -> etau
+            # Skip special/internal attributes
+            if not hasattr(Categorizer.config_inst.channels.n, attr):
+                continue
+            func = _make_channel_categorizer(name, attr)
+            globals()[func.__name__] = func
 
-@categorizer(uses={"channel_id"})
-def cat_ee(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cee.id
+def register_multilepton_categorizers():
+    try:
+        _register_channel_categorizers()
+    except Exception as e:
+        print(f"[INFO] Could not register categorizers yet: {e}")
 
-@categorizer(uses={"channel_id"})
-def cat_mumu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cmumu.id
+# ------------------------------------------------------------------------
+# FALLBACK: If config_inst is not yet initialized (e.g. during import)
+# just define the functions based on known channel names
+# ------------------------------------------------------------------------
+# Generate these upfront so the file works standalone
+for name in MultiLeptonsChannels:
+    chkey = CHANNEL_EXCEPTIONS.get(name, f"c{name}")
+    globals()[f"cat_{name}"] = _make_channel_categorizer(name, chkey)
 
-@categorizer(uses={"channel_id"})
-def cat_emu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cemu.id
-
-# multilepton channels
-@categorizer(uses={"channel_id"})
-def cat_3e(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c3e.id
-
-@categorizer(uses={"channel_id"})
-def cat_2emu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2emu.id
-
-@categorizer(uses={"channel_id"})
-def cat_e2mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.ce2mu.id
-
-@categorizer(uses={"channel_id"})
-def cat_3mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c3mu.id
-
-@categorizer(uses={"channel_id"})
-def cat_4e(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c4e.id
-
-@categorizer(uses={"channel_id"})
-def cat_3emu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c3emu.id
-
-@categorizer(uses={"channel_id"})
-def cat_2e2mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2e2mu.id
-
-@categorizer(uses={"channel_id"})
-def cat_e3mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.ce3mu.id
-
-@categorizer(uses={"channel_id"})
-def cat_4mu(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c4mu.id
-
-@categorizer(uses={"channel_id"})
-def cat_3etau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c3etau.id
-
-@categorizer(uses={"channel_id"})
-def cat_2emutau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2emutau.id
-
-@categorizer(uses={"channel_id"})
-def cat_e2mutau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.ce2mutau.id
-
-@categorizer(uses={"channel_id"})
-def cat_3mutau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c3mutau.id
-
-@categorizer(uses={"channel_id"})
-def cat_2e2tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2e2tau.id
-
-@categorizer(uses={"channel_id"})
-def cat_emu2tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cemu2tau.id
-
-@categorizer(uses={"channel_id"})
-def cat_2mu2tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2mu2tau.id
-
-@categorizer(uses={"channel_id"})
-def cat_e3tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.ce3tau.id
-
-@categorizer(uses={"channel_id"})
-def cat_mu3tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cmu3tau.id
-
-@categorizer(uses={"channel_id"})
-def cat_4tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c4tau.id
-
-@categorizer(uses={"channel_id"})
-def cat_2ess(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2ess.id
-
-@categorizer(uses={"channel_id"})
-def cat_emuss(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.cemuss.id
-
-@categorizer(uses={"channel_id"})
-def cat_2muss(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
-    return events, events.channel_id == self.config_inst.channels.n.c2muss.id
-
+register_multilepton_categorizers()
+# ------------------------------------------------------------------------
+# other Categories 
+# ------------------------------------------------------------------------
 # 3l/4l inclusive, later split into CR / SR via Z-peak
 @categorizer(uses={"channel_id"})
 def cat_3l0tau(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.Array]:
@@ -295,3 +236,5 @@ def cat_tt(self: Categorizer, events: ak.Array, **kwargs) -> tuple[ak.Array, ak.
 @cat_tt.init
 def cat_tt_init(self: Categorizer) -> None:
     self.uses.add(f"{self.config_inst.x.met_name}.{{pt,phi}}")
+
+
