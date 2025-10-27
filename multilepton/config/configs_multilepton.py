@@ -1082,8 +1082,6 @@ def add_config(
             "deterministic_seed",
             # object info
             "Jet.{pt,eta,phi,mass,hadronFlavour,puId,btag*,nConstituents,deterministic_seed}",
-            "HHBJet.{pt,eta,phi,mass,hadronFlavour,puId,btag*,nConstituents,deterministic_seed}",
-            "NonHHBJet.{pt,eta,phi,mass,hadronFlavour,puId,btag*,nConstituents,deterministic_seed}",
             "VBFJet.{pt,eta,phi,mass,hadronFlavour,puId,btag*,nConstituents,deterministic_seed}",
             "FatJet.*",
             "SubJet{1,2}.*",
